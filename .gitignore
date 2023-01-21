@@ -1,0 +1,4 @@
+*.py[codi]
+.vscode
+
+simgui*.json
