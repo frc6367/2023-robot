@@ -43,13 +43,32 @@ class MyRobot(wpilib.TimedRobot):
         self.leftStick = wpilib.Joystick(0)
         self.rightStick = wpilib.Joystick(1)
 
+        self.minidrive = False
+
     def teleopInit(self):
         """Executed at the start of teleop mode"""
         self.myRobot.setSafetyEnabled(True)
 
     def teleopPeriodic(self):
         """Runs the motors with tank steering"""
-        self.myRobot.tankDrive(self.leftStick.getY() * -1, self.rightStick.getY() * -1)
+        # self.myRobot.tankDrive(self.leftStick.getY() * -1, self.rightStick.getY() * -1)
+        if self.rightStick.getRawButtonPressed(3):
+            self.minidrive = True
+            self.timer.reset()
+            self.timer.start()
+            self.gyro.reset()
+
+        if self.minidrive:
+            if self.timer.get() < 2:
+                a = self.gyro.getAngle()
+                v = 0.8 + (a / 180) * 0.8
+                self.myRobot.arcadeDrive(0, v, False)
+            else:
+                # self.minidrive = False
+                # self.myRobot.arcadeDrive(0, 0, False)
+                self.myRobot.tankDrive(
+                    self.leftStick.getY() * -1, self.rightStick.getY() * -1
+                )
 
     # Autonomous
     def autonomousInit(self) -> None:
