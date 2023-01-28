@@ -61,7 +61,7 @@ class MyRobot(wpilib.TimedRobot):
         if self.minidrive:
             if self.timer.get() < 2:
                 a = self.gyro.getAngle()
-                v = 0.8 + (a / 180) * 0.8
+                v = 0.74 + (a / 180) * 0.8
                 self.myRobot.arcadeDrive(0, v, False)
             else:
                 # self.minidrive = False
@@ -83,7 +83,7 @@ class MyRobot(wpilib.TimedRobot):
             self.myRobot.arcadeDrive(0, 0, False)
         elif self.timer.get() < 10.0:
             a = self.gyro.getAngle()
-            v = 0.8 + (a / 180) * 0.8
+            v = 0.74 + (a / 180) * 0.8
             self.myRobot.arcadeDrive(0, v, False)
         elif self.timer.get() < 13.0:
             self.myRobot.arcadeDrive(0.25, 0, False)
@@ -92,7 +92,7 @@ class MyRobot(wpilib.TimedRobot):
             self.gyro.reset()
         elif self.timer.get() < 20.0:
             a = self.gyro.getAngle()
-            v = 0.8 + (a / 180) * 0.8
+            v = 0.74 + (a / 180) * 0.8
             self.myRobot.arcadeDrive(0, v, False)
         elif self.timer.get() < 23.0:
             self.myRobot.arcadeDrive(0.25, 0, False)
