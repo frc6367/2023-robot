@@ -56,12 +56,17 @@ class MyRobot(wpilib.TimedRobot):
         self.frontRightMotor = ctre.WPI_TalonSRX(1)
         self.rearRightMotor = ctre.WPI_TalonSRX(2)
 
+        self.frontRightMotor.setInverted(True)
+        self.rearRightMotor.setInverted(True)
+
         self.left = wpilib.MotorControllerGroup(self.frontLeftMotor, self.rearLeftMotor)
         self.right = wpilib.MotorControllerGroup(
             self.frontRightMotor, self.rearRightMotor
         )
 
-        self.myRobot = wpilib.drive.DifferentialDrive(self.left, self.right)
+        self.drive = wpilib.drive.DifferentialDrive(self.left, self.right)
+        # self.myRobot.setExpiration(0.1)
+
         self.stick = wpilib.Joystick(0)
 
         #
@@ -99,11 +104,11 @@ class MyRobot(wpilib.TimedRobot):
         """
 
         if self.tm.advanceIfElapsed(1.0):
-            print("NavX Gyro", self.ahrs.getYaw(), self.ahrs.getAngle())
+            print("NavX Gyro", self.gyro.getYaw(), self.gyro.getAngle())
 
         rotateToAngle = False
         if self.stick.getRawButton(1):
-            self.ahrs.reset()
+            self.gyro.reset()
 
         if self.stick.getRawButton(2):
             setpoint = 0.0
@@ -120,11 +125,11 @@ class MyRobot(wpilib.TimedRobot):
 
         if rotateToAngle:
             currentRotationRate = self.turnController.calculate(
-                self.ahrs.getYaw(), setpoint
+                self.gyro.getYaw(), setpoint
             )
         else:
             self.turnController.reset()
-            currentRotationRate = self.stick.getX()
+            currentRotationRate = -self.stick.getZ()
 
         # Use the joystick Y axis for forward movement,
         # and either the X axis for rotation or the current
