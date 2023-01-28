@@ -98,7 +98,7 @@ class MyRobot(wpilib.TimedRobot):
         driving".
         """
 
-        if self.tm.hasPeriodPassed(1.0):
+        if self.tm.advanceIfElapsed(1.0):
             print("NavX Gyro", self.ahrs.getYaw(), self.ahrs.getAngle())
 
         rotateToAngle = False
