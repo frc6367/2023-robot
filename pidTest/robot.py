@@ -4,6 +4,7 @@ import wpilib
 import wpilib.drive
 import wpimath.controller
 import ctre
+import navx
 
 from navx import AHRS
 
@@ -68,8 +69,9 @@ class MyRobot(wpilib.TimedRobot):
         # - Alternatively, use the i2c bus.
         # See http://navx-mxp.kauailabs.com/guidance/selecting-an-interface/ for details
         #
+        self.gyro = navx.AHRS.create_spi()
 
-        self.ahrs = AHRS.create_spi()
+        # self.ahrs = AHRS.create_spi()
         # self.ahrs = AHRS.create_i2c()
 
         turnController = wpimath.controller.PIDController(
