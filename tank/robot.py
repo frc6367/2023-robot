@@ -8,25 +8,10 @@
 import ctre
 import navx
 import wpilib
-import wpimath.controller
 from wpilib.drive import DifferentialDrive
-from navx import AHRS
 
 
 class MyRobot(wpilib.TimedRobot):
-    if wpilib.RobotBase.isSimulation():
-        # These PID parameters are used in simulation
-        kP = 0.02
-        kI = 0.00
-        kD = 0.00
-    else:
-        # These PID parameters are used on a real robot
-        kP = 0.03
-        kI = 0.00
-        kD = 0.00
-
-    kToleranceDegrees = 2.0
-
     def robotInit(self):
         """Robot initialization function"""
 
@@ -59,22 +44,6 @@ class MyRobot(wpilib.TimedRobot):
         self.rightStick = wpilib.Joystick(1)
 
         self.minidrive = False
-        self.ahrs = AHRS.create_spi()
-        # self.ahrs = AHRS.create_i2c()
-
-        turnController = wpimath.controller.PIDController(
-            self.kP,
-            self.kI,
-            self.kD,
-        )
-        turnController.enableContinuousInput(-180.0, 180.0)
-        turnController.setTolerance(self.kToleranceDegrees)
-
-        self.turnController = turnController
-
-    def teleopInit(self):
-        """Executed at the start of teleop mode"""
-        self.myRobot.setSafetyEnabled(True)
 
     def teleopPeriodic(self):
         """Runs the motors with tank steering"""

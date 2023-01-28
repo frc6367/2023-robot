@@ -35,7 +35,7 @@ dir
 ```
 py -3 robot.py sim
 ```
-
 ```
 py -3 robot.py deploy
+
 ```
