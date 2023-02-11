@@ -5,8 +5,11 @@ import wpilib.drive
 import wpimath.controller
 import ctre
 import navx
+import rev
 
 from navx import AHRS
+
+# from misc.sparksim import CANSparkMax
 
 
 class MyRobot(wpilib.TimedRobot):
@@ -43,11 +46,11 @@ class MyRobot(wpilib.TimedRobot):
         kD = 0.00
     else:
         # These PID parameters are used on a real robot
-        kP = 0.03
+        kP = 0.001
         kI = 0.00
         kD = 0.00
 
-    kToleranceDegrees = 2.0
+    kToleranceDegrees = 1.0
 
     def robotInit(self):
         # Channels for the wheels
@@ -68,6 +71,7 @@ class MyRobot(wpilib.TimedRobot):
         # self.myRobot.setExpiration(0.1)
 
         self.stick = wpilib.Joystick(0)
+        #self.sticks = wpilib.Joystick(1)
 
         #
         # Communicate w/navX MXP via the MXP SPI Bus.
@@ -84,10 +88,16 @@ class MyRobot(wpilib.TimedRobot):
             self.kI,
             self.kD,
         )
-        turnController.enableContinuousInput(-180.0, 180.0)
+        # turnController.enableContinuousInput(-180.0, 180.0)
         turnController.setTolerance(self.kToleranceDegrees)
 
-        self.turnController = turnController
+        wpilib.SmartDashboard.putNumber("auto_p", self.kP)
+        wpilib.SmartDashboard.putNumber("auto_D", self.kD)
+
+        self.tiltController = turnController
+
+        self.intakem = rev.CANSparkMax(5, rev.CANSparkMax.MotorType.kBrushless)
+        #self.intakems = rev.CANSparkMax(6, rev.CANSparkMax.MotorType.kBrushless)
 
     def teleopInit(self):
         self.tm = wpilib.Timer()
@@ -102,34 +112,35 @@ class MyRobot(wpilib.TimedRobot):
         be used while driving to implement "straight-line
         driving".
         """
+        self.intakem.set(self.stick.getZ())
+       # self.intakems.set(self.sticks.getZ())
 
         if self.tm.advanceIfElapsed(1.0):
-            print("NavX Gyro", self.gyro.getYaw(), self.gyro.getAngle())
+            print("NavX Gyro", self.gyro.getRoll(), self.gyro.getAngle())
 
-        rotateToAngle = False
-        if self.stick.getRawButton(1):
+        auto_balance = False
+        if self.stick.getRawButton(2):
             self.gyro.reset()
 
-        if self.stick.getRawButton(2):
-            setpoint = 0.0
-            rotateToAngle = True
-        elif self.stick.getRawButton(3):
-            setpoint = 90.0
-            rotateToAngle = True
-        elif self.stick.getRawButton(4):
-            setpoint = 180.9
-            rotateToAngle = True
-        elif self.stick.getRawButton(5):
-            setpoint = -90.0
-            rotateToAngle = True
+        if self.stick.getRawButton(1):
 
-        if rotateToAngle:
-            currentRotationRate = self.turnController.calculate(
-                self.gyro.getYaw(), setpoint
-            )
+            auto_balance = True
+        # if self.stick.getRawButton(3):
+        #    self.intakem.set(1.0)
+            # self.stick = rev.CANSparkMax(1, rev.CANSparkMax.MotorType.kBrushless)
+            # self.intake.motor.setvoltage()
+        if auto_balance:
+            speed = self.tiltController.calculate(self.gyro.getRoll(), 0)
+            rotation = 0
+            squared = False
         else:
-            self.turnController.reset()
-            currentRotationRate = -self.stick.getZ()
+            self.tiltController.reset()
+            self.tiltController.setP(wpilib.SmartDashboard.getNumber("auto_p", self.kP))
+            self.tiltController.setD(wpilib.SmartDashboard.getNumber("auto_d", self.kD))
+
+            speed = -self.stick.getY()
+            rotation = -self.stick.getZ()
+            squared = True
 
         # Use the joystick Y axis for forward movement,
         # and either the X axis for rotation or the current
@@ -140,7 +151,7 @@ class MyRobot(wpilib.TimedRobot):
         # illustrates one way you could implement this using
         # a 4 wheel drive robot
 
-        self.drive.arcadeDrive(-self.stick.getY(), currentRotationRate)
+        self.drive.arcadeDrive(speed, rotation, squared)
 
 
 if __name__ == "__main__":
