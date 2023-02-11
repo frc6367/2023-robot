@@ -5,13 +5,25 @@ import rev
 class Arm:
     intake: rev.CANSparkMax(5, rev.CANSparkMax.MotorType.kBrushless)
 
-    def hi(self):
+    #
+    # Action methods
+    #
+
+    def gotoHi(self):
         pass
-    def middle(self):
+    def gotoMiddle(self):
         pass
-    def low(self):
+    def gotoLow(self):
         pass
-    def netural(self):
+    def gotoNetural(self):
         pass
     
-    wpilib.SmartDashboard.
+    #
+    #Feedback mathods
+    #
+
+
+
+    #
+    #Execute
+    #
