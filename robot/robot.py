@@ -19,6 +19,9 @@ class MyRobot(magicbot.MagicRobot):
         self.frontRightMotor.setInverted(True)
         self.rearRightMotor.setInverted(True)
     
+        self.arm_motor = rev.CANSparkMax(5, rev.CANSparkMax.MotorType.kBrushless)
+        self.grabber_motor = rev.CANSparkMax(7, rev.CANSparkMax.MotorType.kBrushless)
+
     def teleopInit(self):
     
     def teleopPeriodic(self):
