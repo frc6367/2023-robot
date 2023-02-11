@@ -22,8 +22,16 @@ class Arm:
     #Feedback mathods
     #
 
-
+    @magicbot.feedback
+    def getAngle(self):
+        pass
+    @magicbot.feedback
+    def getPosition(self):
+        pass
 
     #
     #Execute
     #
+
+    def execute(self):
+        pass
