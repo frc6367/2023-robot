@@ -11,10 +11,13 @@ class Grabber:
     #
 
     def grab(self):
-        pass
+        self.grabber_motor.set(-0.5)
 
     def release(self):
-        pass
+        self.grabber_motor.set(0.5)
+
+    def stop(self):
+        self.grabber_motor.set(0)
 
     #
     # Feedback mathods

@@ -4,22 +4,47 @@ import magicbot
 
 
 class DriveTrain:
-    frontLeftMotor: ctre.WPI_TalonSRX
-    rearLeftMotor: ctre.WPI_TalonSRX
-    frontRightMotor: ctre.WPI_TalonSRX
-    rearRightMotor: ctre.WPI_TalonSRX
+    drive_l1: ctre.WPI_TalonSRX
+    drive_l2: ctre.WPI_TalonSRX
+    drive_r1: ctre.WPI_TalonSRX
+    drive_r2: ctre.WPI_TalonSRX
 
     speed = magicbot.will_reset_to(0)
     rotation = magicbot.will_reset_to(0)
+    limit = magicbot.will_reset_to(1.0)
+
+    l = magicbot.will_reset_to(0.0)
+    r = magicbot.will_reset_to(0.0)
+    tank = magicbot.will_reset_to(False)
 
     def setup(self):
-        self.drive = wpilib.drive.DifferentialDrive(
-            self.frontLeftMotor,
-            self.rearLeftMotor,
-            self.frontRightMotor,
-            self.rearRightMotor,
-        )
+        # self.drive_l1.setInverted(True)
+        self.drive_l2.setInverted(True)
+
+        self.drive_l2.follow(self.drive_l1)
+        self.drive_r2.follow(self.drive_r1)
+
+        self.drive = wpilib.drive.DifferentialDrive(self.drive_l1, self.drive_r1)
+
+    def limit_speed(self):
+        self.limit = 0.5
 
     def move(self, speed: float, rotation: float):
         self.speed = speed
         self.rotation = rotation
+
+    def tank_drive(self, l, r):
+        self.tank = True
+        self.l = l
+        self.r = r
+
+    def rotate(self, rotation: float):
+        self.rotation = rotation
+
+    def execute(self):
+        if self.tank:
+            self.drive.tankDrive(self.l, self.r)
+        else:
+            self.drive.arcadeDrive(
+                self.speed * self.limit, self.rotation * self.limit, False
+            )
