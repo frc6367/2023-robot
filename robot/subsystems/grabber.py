@@ -12,6 +12,8 @@ class Grabber:
 
     def grab(self):
         pass
+    
+        
 
     def release(self):
         pass
@@ -27,6 +29,7 @@ class Grabber:
     @magicbot.feedback
     def isOpen(self):
         pass
+        
 
     @magicbot.feedback
     def isClosed(self):

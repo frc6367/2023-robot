@@ -23,8 +23,10 @@ class MyRobot(magicbot.MagicRobot):
         self.grabber_motor = rev.CANSparkMax(7, rev.CANSparkMax.MotorType.kBrushless)
 
     def teleopInit(self):
+        pass
     
     def teleopPeriodic(self):
+        pass
 
 if __name__ == '__main__':
     wpilib.run(MyRobot)
