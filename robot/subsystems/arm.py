@@ -3,6 +3,7 @@ import wpilib.drive
 import rev
 
 
+<<<<<<< Updated upstream
 class Arm:
     arm_motor: rev.CANSparkMax
     arm_motor2: rev.CANSparkMax
@@ -51,10 +52,13 @@ class Arm:
         self.pidController.setFF(self.kFF)
         self.pidController.setOutputRange(self.kMinOutput, self.kMaxOutput)
 
+=======
+>>>>>>> Stashed changes
     #
     # Action methods
     #
 
+<<<<<<< Updated upstream
     def gotoHi(self):
         self.gotoAngle = 20
 
@@ -88,12 +92,28 @@ class Arm:
         if p > self.NETURAL_MIN and p < self.NETURAL_MAX:
             return "NETURAL"
         return ""
+=======
+    def hi(self):
+        pass
+    def middle(self):
+        pass
+    def low(self):
+        pass
+    def netural(self):
+        pass
+
+    #
+    # Feedback methods
+    #
+
+>>>>>>> Stashed changes
 
     #
     # Execute
     #
 
     def execute(self):
+<<<<<<< Updated upstream
         # PIDController objects are commanded to a set point using the
         # setReference() method.
         #
@@ -112,3 +132,8 @@ class Arm:
         self.pidController.setReference(
             self.gotoAngle, rev.CANSparkMax.ControlType.kPosition
         )
+=======
+        pass
+    
+    wpilib.SmartDashboard.
+>>>>>>> Stashed changes
