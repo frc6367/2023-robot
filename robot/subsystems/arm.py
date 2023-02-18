@@ -5,6 +5,7 @@ import rev
 
 class Arm:
     arm_motor: rev.CANSparkMax
+    arm_motor2: rev.CANSparkMax
 
     HI_MIN = 6
     HI_MAX = 7
@@ -17,6 +18,38 @@ class Arm:
 
     NETURAL_MIN = 0
     NETURAL_MAX = 1
+
+    def createObjects(self):
+
+        self.arm_motor2.follow(self.arm_motor, invert=True)
+
+        self.encoder = self.arm_motor.getEncoder()
+
+        # You must call getPIDController() on an existing CANSparkMax or
+        # SparkMax object to fully use PID functionality
+        self.pidController = self.arm_motor.getPIDController()
+
+        self.kP = 0.1
+        self.kI = 1e-4
+        self.kD = 0
+        self.kIz = 0
+        self.kFF = 0
+        self.kMinOutput = -1
+        self.kMaxOutput = 1
+
+        # The restoreFactoryDefaults() method can be used to reset the
+        # configuration parameters in the SPARK MAX to their factory default
+        # state. If no argument is passed, these parameters will not persist
+        # between power cycles
+        self.arm_motor.restoreFactoryDefaults()
+
+        # Set PID Constants
+        self.pidController.setP(self.kP)
+        self.pidController.setI(self.kI)
+        self.pidController.setD(self.kD)
+        self.pidController.setIZone(self.kIz)
+        self.pidController.setFF(self.kFF)
+        self.pidController.setOutputRange(self.kMinOutput, self.kMaxOutput)
 
     #
     # Action methods
@@ -61,4 +94,21 @@ class Arm:
     #
 
     def execute(self):
-        pass
+        # PIDController objects are commanded to a set point using the
+        # setReference() method.
+        #
+        # The first parameter is the value of the set point, whose units vary
+        # depending on the control type set in the second parameter.
+        #
+        # The second parameter is the control type can be set to one of four
+        # parameters:
+        # rev.CANSparkMax.ControlType.kDutyCycle
+        # rev.CANSparkMax.ControlType.kPosition
+        # rev.CANSparkMax.ControlType.kVelocity
+        # rev.CANSparkMax.ControlType.kVoltage
+        #
+        # For more information on what these types are, refer to the Spark Max
+        # documentation.
+        self.pidController.setReference(
+            self.gotoAngle, rev.CANSparkMax.ControlType.kPosition
+        )
