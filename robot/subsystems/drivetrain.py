@@ -41,6 +41,17 @@ class DriveTrain:
     def rotate(self, rotation: float):
         self.rotation = rotation
 
+    def move_encoder_stright(self,position):
+        raise NotImplemented
+    
+    def is_at_desired_position(self):
+        raise NotImplemented
+    
+    def move_encoder_backwards(self):
+        raise NotImplemented
+        
+
+
     def execute(self):
         if self.tank:
             self.drive.tankDrive(self.l, self.r)
@@ -48,3 +59,5 @@ class DriveTrain:
             self.drive.arcadeDrive(
                 self.speed * self.limit, self.rotation * self.limit, False
             )
+
+    

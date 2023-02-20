@@ -38,8 +38,8 @@ class MyRobot(magicbot.MagicRobot):
             self.grabber.release()
         else:
             self.grabber.stop()
-        if self.joystick.getY():
-            
+
+        self.drivetrain.move(-self.joystick.getY(), -self.joystick.getX())
 
 
 if __name__ == "__main__":
