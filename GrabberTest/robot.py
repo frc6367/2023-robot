@@ -24,7 +24,6 @@ class MyRobot(wpilib.TimedRobot):
         wpilib.SmartDashboard.putNumber(
             "encoder", self.grabber.getEncoder().getPosition()
         )
-
         if self.stick.getRawButton(11):
             self.grabber.set(self.stick.getZ())
         else:
