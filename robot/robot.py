@@ -1,3 +1,5 @@
+#!/usr/bin/env python3
+
 import wpilib
 import magicbot
 
@@ -7,6 +9,7 @@ import ctre
 import rev
 import navx
 
+import constants
 from misc.ejoystick import EnhancedJoystick
 from subsystems.grabber import Grabber
 from subsystems.drivetrain import DriveTrain
@@ -21,8 +24,10 @@ class MyRobot(magicbot.MagicRobot):
     arm: Arm
 
     def createObjects(self):
+        # Joysticks
         self.stick = EnhancedJoystick(0)
 
+        # Drivetrain
         self.drive_l1 = ctre.WPI_TalonSRX(4)
         self.drive_l2 = ctre.WPI_TalonSRX(3)
         self.drive_r1 = ctre.WPI_TalonSRX(1)
@@ -31,11 +36,30 @@ class MyRobot(magicbot.MagicRobot):
         self.drive_r1.setInverted(True)
         self.drive_r2.setInverted(True)
 
+        self.encoder_l = wpilib.Encoder(0, 1)
+        self.encoder_r = wpilib.Encoder(2, 3)
+        self.encoder_l.setDistancePerPulse(constants.kDistancePerPulse)
+        self.encoder_r.setDistancePerPulse(constants.kDistancePerPulse)
+        self.encoder_r.setReverseDirection(True)
+
+        # Gyro
+        self.ahrs = navx.AHRS.create_spi()
+
+        # Arm
         self.arm_motor = rev.CANSparkMax(6, rev.CANSparkMax.MotorType.kBrushless)
         self.arm_motor2 = rev.CANSparkMax(7, rev.CANSparkMax.MotorType.kBrushless)
 
+        # Grabber
         self.grabber_motor = rev.CANSparkMax(5, rev.CANSparkMax.MotorType.kBrushless)
         self.grabber_sensor = SharpIR2Y0A41(0)
+
+    @magicbot.feedback
+    def left_encoder(self) -> int:
+        return self.encoder_l.get()
+
+    @magicbot.feedback
+    def right_encoder(self) -> int:
+        return self.encoder_r.get()
 
     def teleopInit(self):
         pass
