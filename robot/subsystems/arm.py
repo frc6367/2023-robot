@@ -7,40 +7,39 @@ class Arm:
     arm_motor: rev.CANSparkMax
     arm_motor2: rev.CANSparkMax
 
-    HI_MIN = 6
-    HI_MAX = 7
+    HI_POS = 66
+    HI_MIN = HI_POS - 2
+    HI_MAX = HI_POS + 2
 
-    MID_MIN = 4
-    MID_MAX = 5
+    MID_POS = 53
+    MID_MIN = MID_POS - 2
+    MID_MAX = MID_POS + 2
 
-    LOW_MIN = 2
-    LOW_MAX = 3
+    LOW_POS = 19
+    LOW_MIN = LOW_POS - 2
+    LOW_MAX = LOW_POS + 2
 
-    NETURAL_MIN = 0
-    NETURAL_MAX = 1
+    NEUTRAL_POS = 0
+    NEUTRAL_MIN = NEUTRAL_POS - 2
+    NEUTRAL_MAX = NEUTRAL_POS + 2
 
-    def createObjects(self):
+    def setup(self):
+        self.arm_encoder = self.arm_motor.getEncoder()
 
-        self.arm_motor2.follow(self.arm_motor, invert=True)
+        self.arm_motor2.follow(self.arm_motor, True)
 
-        self.encoder = self.arm_motor.getEncoder()
-
-        # You must call getPIDController() on an existing CANSparkMax or
-        # SparkMax object to fully use PID functionality
         self.pidController = self.arm_motor.getPIDController()
 
         self.kP = 0.1
-        self.kI = 1e-4
+        self.kI = 0
         self.kD = 0
         self.kIz = 0
         self.kFF = 0
-        self.kMinOutput = -1
-        self.kMaxOutput = 1
+        self.kMinOutput = -0.3
+        self.kMaxOutput = 0.3
 
-        # The restoreFactoryDefaults() method can be used to reset the
-        # configuration parameters in the SPARK MAX to their factory default
-        # state. If no argument is passed, these parameters will not persist
-        # between power cycles
+        self.gotoAngle = 0
+
         self.arm_motor.restoreFactoryDefaults()
 
         # Set PID Constants
@@ -51,42 +50,37 @@ class Arm:
         self.pidController.setFF(self.kFF)
         self.pidController.setOutputRange(self.kMinOutput, self.kMaxOutput)
 
-    #
-    # Action methods
-    #
-
     def gotoHi(self):
-        self.gotoAngle = 20
+        self.gotoAngle = self.HI_POS
 
     def gotoMiddle(self):
-        self.gotoAngle = 15
+        self.gotoAngle = self.MID_POS
 
     def gotoLow(self):
-        self.gotoAngle = 10
+        self.gotoAngle = self.LOW_POS
 
-    def gotoNetural(self):
-        self.gotoAngle = 5
+    def gotoNeutral(self):
+        self.gotoAngle = self.NEUTRAL_POS
 
     #
     # Feedback mathods
     #
 
-    @magicbot.feedback
-    def getAngle(self):
-        encoder = self.arm_motor.getEncoder()
+    # @magicbot.feedback
+    # def getAngle(self):
+    #     encoder = self.arm_motor.getEncoder()
 
     @magicbot.feedback
     def getPosition(self):
-        encoder = self.arm_motor.getEncoder()
-        p = encoder.getPosition()
+        p = self.arm_encoder.getPosition()
         if p > self.LOW_MIN and p < self.LOW_MAX:
             return "LOW"
         if p > self.MID_MIN and p < self.MID_MAX:
             return "MID"
         if p > self.HI_MIN and p < self.HI_MAX:
             return "HI"
-        if p > self.NETURAL_MIN and p < self.NETURAL_MAX:
-            return "NETURAL"
+        if p > self.NEUTRAL_MIN and p < self.NEUTRAL_MAX:
+            return "NEUTRAL"
         return ""
 
     #

@@ -9,33 +9,36 @@ from subsystems.arm import Arm
 
 class scoring(AutonomousStateMachine):
     MODE_NAME = "scoring"
-    DEFAULT = True
+    DEFAULT = False
 
     # Injected from the definition in robot.py
     drivetrain: DriveTrain
-    Grabber: Grabber
+    grabber: Grabber
     arm: Arm
 
     @state(first=True)
     def raise_to_level3(self):
+        self.arm.gotoHi()
         if self.arm.getPosition() == "HI":
             self.next_state(self.move_forward)
 
-    @state(duration=3)
+    @timed_state(duration=1, next_state="release_grabber")
     def move_forward(self):
-        self.drivetrain.move_encoder_stright(20)
+        self.drivetrain.move(0.2, 0)
 
-        if self.drivetrain.is_at_desired_position():
-            self.next_state(self.release_grabber)
+        # self.drivetrain.move_encoder_stright(20)
+
+        # if self.drivetrain.is_at_desired_position():
+        #     self.next_state(self.release_grabber)
+
+    @timed_state(duration=1, next_state="back_up_out_the_communtiy")
+    def release_grabber(self):
+        self.grabber.release()
 
     @timed_state(duration=3)
-    def release_grabber(self):
-        if self.Grabber.release() == -0.5:
-            self.next_state(self.back_up_out_the_communtiy)
-
-    @state(duration=3)
     def back_up_out_the_communtiy(self):
-        self.drivetrain.move_encoder_backwards(-20)
+        self.drivetrain.move(-0.2, 0)
+        # self.drivetrain.move_encoder_backwards(-20)
 
-        if self.drivetrain.is_at_desired_position():
-            breakpoint
+        # if self.drivetrain.is_at_desired_position():
+        #     breakpoint

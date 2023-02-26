@@ -1,6 +1,8 @@
 import wpilib.drive
 import ctre
 import magicbot
+import wpimath.controller
+from wpimath.trajectory.constraint import DifferentialDriveKinematicsConstraint
 
 
 class DriveTrain:
@@ -19,12 +21,15 @@ class DriveTrain:
 
     def setup(self):
         # self.drive_l1.setInverted(True)
-        self.drive_l2.setInverted(True)
+        # self.drive_l2.setInverted(True)
 
         self.drive_l2.follow(self.drive_l1)
         self.drive_r2.follow(self.drive_r1)
 
         self.drive = wpilib.drive.DifferentialDrive(self.drive_l1, self.drive_r1)
+
+        self.l_pid = wpimath.controller.ProfiledPIDController(0.1, 0, 0, self.constraints)
+        self.r_pid = wpimath.controller.ProfiledPIDController()
 
     def limit_speed(self):
         self.limit = 0.5
@@ -41,16 +46,14 @@ class DriveTrain:
     def rotate(self, rotation: float):
         self.rotation = rotation
 
-    def move_encoder_stright(self,position):
+    def move_encoder_stright(self, position):
         raise NotImplemented
-    
+
     def is_at_desired_position(self):
         raise NotImplemented
-    
+
     def move_encoder_backwards(self):
         raise NotImplemented
-        
-
 
     def execute(self):
         if self.tank:
@@ -59,5 +62,3 @@ class DriveTrain:
             self.drive.arcadeDrive(
                 self.speed * self.limit, self.rotation * self.limit, False
             )
-
-    
