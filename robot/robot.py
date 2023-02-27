@@ -42,8 +42,8 @@ class MyRobot(magicbot.MagicRobot):
         self.drive_r1.setInverted(True)
         self.drive_r2.setInverted(True)
 
-        self.encoder_l = wpilib.Encoder(0, 1)
-        self.encoder_r = wpilib.Encoder(2, 3)
+        self.encoder_l = wpilib.Encoder(2, 3)
+        self.encoder_r = wpilib.Encoder(0, 1)
         self.encoder_l.setDistancePerPulse(constants.kDistancePerPulse)
         self.encoder_r.setDistancePerPulse(constants.kDistancePerPulse)
         self.encoder_r.setReverseDirection(True)
@@ -66,6 +66,14 @@ class MyRobot(magicbot.MagicRobot):
     @magicbot.feedback
     def right_encoder(self) -> int:
         return self.encoder_r.get()
+
+    @magicbot.feedback
+    def left_encoder_d(self) -> int:
+        return self.encoder_l.getDistance()
+
+    @magicbot.feedback
+    def right_encoder_d(self) -> int:
+        return self.encoder_r.getDistance()
 
     def teleopInit(self):
         pass
