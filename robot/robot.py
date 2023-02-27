@@ -14,14 +14,18 @@ from misc.ejoystick import EnhancedJoystick
 from subsystems.grabber import Grabber
 from subsystems.drivetrain import DriveTrain
 from subsystems.arm import Arm
+
 from components.auto_grabber import AutoGrabber
+from components.auto_balance import AutoBalance
 
 
 class MyRobot(magicbot.MagicRobot):
     auto_grab: AutoGrabber
     grabber: Grabber
-    drivetrain: DriveTrain
     arm: Arm
+
+    autobalance: AutoBalance
+    drivetrain: DriveTrain
 
     def createObjects(self):
         # Joysticks
@@ -68,6 +72,11 @@ class MyRobot(magicbot.MagicRobot):
         # drivetrain logic goes first
         speed = -self.stick.getEnhY()
         rotation = -self.stick.getEnhTwist()
+
+        if self.stick.getRawButton(4):
+            self.autobalance.overcome()
+        elif self.stick.getRawButton(3):
+            self.autobalance.maintain()
 
         self.drivetrain.move(speed, rotation)
 
