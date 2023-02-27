@@ -27,6 +27,8 @@ class MyRobot(magicbot.MagicRobot):
     autobalance: AutoBalance
     drivetrain: DriveTrain
 
+    twitch = magicbot.tunable(0.5)
+
     def createObjects(self):
         # Joysticks
         self.stick = EnhancedJoystick(0)
@@ -71,7 +73,7 @@ class MyRobot(magicbot.MagicRobot):
     def teleopPeriodic(self):
         # drivetrain logic goes first
         speed = -self.stick.getEnhY()
-        rotation = -self.stick.getEnhTwist()
+        rotation = -self.stick.getEnhTwist() * abs(self.twitch)
 
         if self.stick.getRawButton(4):
             self.autobalance.overcome()
