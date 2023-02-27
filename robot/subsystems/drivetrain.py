@@ -1,8 +1,6 @@
 import wpilib.drive
 import ctre
 import magicbot
-import wpimath.controller
-from wpimath.trajectory.constraint import DifferentialDriveKinematicsConstraint
 
 
 class DriveTrain:
@@ -28,11 +26,6 @@ class DriveTrain:
         self.drive_r2.follow(self.drive_r1)
 
         self.drive = wpilib.drive.DifferentialDrive(self.drive_l1, self.drive_r1)
-
-        # self.l_pid = wpimath.controller.ProfiledPIDController(
-        #     0.1, 0, 0, self.constraints
-        # )
-        # self.r_pid = wpimath.controller.ProfiledPIDController()
 
     def limit_speed(self):
         self.limit = 0.5

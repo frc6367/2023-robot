@@ -15,18 +15,10 @@ class AutoGrabber:
         self.activated = True
 
     def execute(self):
-        # print(
-        #     "autog",
-        #     self.activated,
-        #     self.enable,
-        #     self.grabber.isObjectSensed(),
-        #     self.arm.getPosition(),
-        # )
         if (
             self.activated
             and self.enable
             and self.grabber.isObjectSensed()
             and self.arm.getPosition() == "NEUTRAL"
         ):
-            print("Tried to grab")
             self.grabber.grab()
