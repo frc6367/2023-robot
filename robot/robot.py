@@ -16,6 +16,7 @@ from subsystems.drivetrain import DriveTrain
 from subsystems.arm import Arm
 
 from components.auto_grabber import AutoGrabber
+from components.drivectrl import DriveController
 from components.auto_balance import AutoBalance
 
 
@@ -25,6 +26,7 @@ class MyRobot(magicbot.MagicRobot):
     arm: Arm
 
     autobalance: AutoBalance
+    drivectrl: DriveController
     drivetrain: DriveTrain
 
     twitch = magicbot.tunable(0.5)
