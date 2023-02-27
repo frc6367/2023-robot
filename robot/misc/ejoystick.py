@@ -55,6 +55,7 @@ if __name__ == "__main__":
         v /= 10.0
         x.append(v)
         ds.setJoystickAxis(0, 1, v)
+        ds.notifyNewData()
         y.append(stick.getEnhY())
         # ds.setJoystickAxis(0, 2, v)
         # y.append(stick.getEnhTwist())
