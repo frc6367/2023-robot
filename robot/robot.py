@@ -31,8 +31,8 @@ class MyRobot(magicbot.MagicRobot):
         self.drive_r1.setInverted(True)
         self.drive_r2.setInverted(True)
 
-        self.arm_motor = rev.CANSparkMax(6, rev.CANSparkMax.MotorType.kBrushless)
-        self.arm_motor2 = rev.CANSparkMax(7, rev.CANSparkMax.MotorType.kBrushless)
+        self.arm_motor = rev.CANSparkMax(7, rev.CANSparkMax.MotorType.kBrushless)
+        self.arm_motor2 = rev.CANSparkMax(6, rev.CANSparkMax.MotorType.kBrushless)
 
         self.grabber_motor = rev.CANSparkMax(5, rev.CANSparkMax.MotorType.kBrushless)
         self.grabber_sensor = SharpIR2Y0A41(0)
