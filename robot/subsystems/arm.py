@@ -1,11 +1,12 @@
 import magicbot
 import wpilib.drive
-import rev
+
+from misc.sparksim import CANSparkMax
 
 
 class Arm:
-    arm_motor: rev.CANSparkMax
-    arm_motor2: rev.CANSparkMax
+    arm_motor: CANSparkMax
+    arm_motor2: CANSparkMax
 
     HI_POS = 66
     HI_MIN = HI_POS - 2
@@ -111,5 +112,5 @@ class Arm:
         # For more information on what these types are, refer to the Spark Max
         # documentation.
         self.pidController.setReference(
-            self.gotoAngle, rev.CANSparkMax.ControlType.kPosition
+            self.gotoAngle, CANSparkMax.ControlType.kPosition
         )

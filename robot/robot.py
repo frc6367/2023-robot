@@ -6,11 +6,14 @@ import magicbot
 from robotpy_ext.common_drivers.distance_sensors import SharpIR2Y0A41
 
 import ctre
-import rev
 import navx
+import rev
 
 import constants
+
 from misc.ejoystick import EnhancedJoystick
+from misc.sparksim import CANSparkMax
+
 from subsystems.grabber import Grabber
 from subsystems.drivetrain import DriveTrain
 from subsystems.arm import Arm
@@ -55,10 +58,6 @@ class MyRobot(magicbot.MagicRobot):
         # Arm
         self.arm_motor = rev.CANSparkMax(7, rev.CANSparkMax.MotorType.kBrushless)
         self.arm_motor2 = rev.CANSparkMax(6, rev.CANSparkMax.MotorType.kBrushless)
-=======
-        self.arm_motor = rev.CANSparkMax(7, rev.CANSparkMax.MotorType.kBrushless)
-        self.arm_motor2 = rev.CANSparkMax(6, rev.CANSparkMax.MotorType.kBrushless)
->>>>>>> 5e964a100a2d860cc1c6cb62cb723c094d3a9f0f
 
         # Grabber
         self.grabber_motor = rev.CANSparkMax(5, rev.CANSparkMax.MotorType.kBrushless)
