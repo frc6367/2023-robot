@@ -20,6 +20,7 @@ from subsystems.arm import Arm
 
 from components.auto_grabber import AutoGrabber
 from components.auto_balance import AutoBalance
+from components.ramsete import RamseteComponent
 
 
 class MyRobot(magicbot.MagicRobot):
@@ -27,6 +28,7 @@ class MyRobot(magicbot.MagicRobot):
     grabber: Grabber
     arm: Arm
 
+    ramsete: RamseteComponent
     autobalance: AutoBalance
     drivetrain: DriveTrain
 
