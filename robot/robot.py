@@ -6,11 +6,14 @@ import magicbot
 from robotpy_ext.common_drivers.distance_sensors import SharpIR2Y0A41
 
 import ctre
-import rev
 import navx
+import rev
 
 import constants
+
 from misc.ejoystick import EnhancedJoystick
+from misc.sparksim import CANSparkMax
+
 from subsystems.grabber import Grabber
 from subsystems.drivetrain import DriveTrain
 from subsystems.arm import Arm
@@ -52,8 +55,8 @@ class MyRobot(magicbot.MagicRobot):
         self.ahrs = navx.AHRS.create_spi()
 
         # Arm
-        self.arm_motor = rev.CANSparkMax(6, rev.CANSparkMax.MotorType.kBrushless)
-        self.arm_motor2 = rev.CANSparkMax(7, rev.CANSparkMax.MotorType.kBrushless)
+        self.arm_motor = CANSparkMax(6, CANSparkMax.MotorType.kBrushless)
+        self.arm_motor2 = CANSparkMax(7, CANSparkMax.MotorType.kBrushless)
 
         # Grabber
         self.grabber_motor = rev.CANSparkMax(5, rev.CANSparkMax.MotorType.kBrushless)
