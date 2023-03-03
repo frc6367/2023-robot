@@ -41,32 +41,42 @@ class PhysicsEngine:
 
         self.physics_controller = physics_controller
 
-        # Motors
+        # Drivetrain simulation
         self.lf_motor = robot.drive_l1.getSimCollection()
         # self.lr_motor = wpilib.simulation.PWMSim(2)
         self.rf_motor = robot.drive_r1.getSimCollection()
         # self.rr_motor = wpilib.simulation.PWMSim(4)
 
-        # Change these parameters to fit your robot!
-        bumper_width = 3.25 * units.inch
+        self.leftEncoderSim = wpilib.simulation.EncoderSim(robot.encoder_l)
+        self.rightEncoderSim = wpilib.simulation.EncoderSim(robot.encoder_r)
+        self.rightEncoderSim.setReverseDirection(True)
 
-        # fmt: off
-        self.drivetrain = tankmodel.TankModel.theory(
-            motor_cfgs.MOTOR_CFG_CIM,           # motor configuration
-            110 * units.lbs,                    # robot mass
-            10.71,                              # drivetrain gear ratio
-            2,                                  # motors per side
-            22 * units.inch,                    # robot wheelbase
-            23 * units.inch + bumper_width * 2, # robot width
-            32 * units.inch + bumper_width * 2, # robot length
-            6 * units.inch,                     # wheel diameter
+        system = wpimath.system.LinearSystemId.identifyDrivetrainSystem(
+            constants.kV_linear,
+            constants.kA_linear,
+            constants.kV_angular,
+            constants.kA_angular,
         )
-        # fmt: on
+
+        self.drivesim = wpilib.simulation.DifferentialDrivetrainSim(
+            system,
+            # The robot's trackwidth, which is the distance between the wheels on the left side
+            # and those on the right side. The units is meters.
+            constants.kTrackWidth,
+            wpimath.system.plant.DCMotor.CIM(4),
+            10.71,
+            # The radius of the drivetrain wheels in meters.
+            constants.kWheelRadius,
+        )
+
+        self.drivesim.setPose(constants.kStartingPose)
+        self.physics_controller.field.setRobotPose(constants.kStartingPose)
+        self.gyro_offset = constants.kStartingPose.rotation().degrees()
 
         self.navx = wpilib.simulation.SimDeviceSim("navX-Sensor[4]")
         self.navx_yaw = self.navx.getDouble("Yaw")
 
-        self.physics_controller.move_robot(wpimath.geometry.Transform2d(5, 5, 0))
+        # self.physics_controller.move_robot(wpimath.geometry.Transform2d(5, 5, 0))
 
         # Arm simulation
         motor = wpimath.system.plant.DCMotor.NEO(2)
@@ -111,18 +121,58 @@ class PhysicsEngine:
 
         voltage = wpilib.simulation.RoboRioSim.getVInVoltage()
 
-        # Simulate the drivetrain (only front motors used because read should be in sync)
-        lf_motor = self.lf_motor.getMotorOutputLeadVoltage() / 12
-        rf_motor = self.rf_motor.getMotorOutputLeadVoltage() / 12
+        # Simulate the drivetrain
+        field = self.physics_controller.field
+        # self.drivesim.setPose(field.getRobotPose())
 
-        transform = self.drivetrain.calculate(lf_motor, rf_motor, tm_diff)
-        pose = self.physics_controller.move_robot(transform)
+        self.lf_motor.setBusVoltage(voltage)
+        self.rf_motor.setBusVoltage(voltage)
+        # drivetrain always wants to drive to the left
+        l_voltage = self.lf_motor.getMotorOutputLeadVoltage() * 0.95
+        r_voltage = -self.rf_motor.getMotorOutputLeadVoltage()
+
+        # Apply kS
+
+        # .. this doesn't work
+        # kS_linear = self.kS_linear
+        # kS_angular = self.kS_angular
+        # if abs(l_voltage - r_voltage) > kS_linear:
+        #     kS = kS_angular
+        # else:
+        #     kS = kS_linear
+
+        kS = constants.kS_linear
+
+        if l_voltage > kS:
+            l_voltage -= kS
+        elif l_voltage < -kS:
+            l_voltage += kS
+        else:
+            l_voltage = 0
+
+        if r_voltage > kS:
+            r_voltage -= kS
+        elif r_voltage < -kS:
+            r_voltage += kS
+        else:
+            r_voltage = 0
+
+        self.drivesim.setInputs(l_voltage, r_voltage)
+        self.drivesim.update(tm_diff)
+
+        self.leftEncoderSim.setDistance(self.drivesim.getLeftPosition())
+        self.leftEncoderSim.setRate(self.drivesim.getLeftVelocity())
+        self.rightEncoderSim.setDistance(self.drivesim.getRightPosition())
+        self.rightEncoderSim.setRate(self.drivesim.getRightVelocity())
+
+        pose = self.drivesim.getPose()
+        field.setRobotPose(pose)
 
         # Update the gyro simulation
         # -> FRC gyros are positive clockwise, but the returned pose is positive
         #    counter-clockwise
         # self.gyro.setAngle(-pose.rotation().degrees())
-        self.navx_yaw.set(-pose.rotation().degrees())
+        self.navx_yaw.set(-pose.rotation().degrees() + self.gyro_offset)
 
         # Update the arm
         self.armSim.setInputVoltage(self.arm_motor_sim.getSpeed() * voltage)
