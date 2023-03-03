@@ -32,7 +32,7 @@ class DriveTrain:
         # self.r_pid = wpimath.controller.ProfiledPIDController()
 
     def limit_speed(self):
-        self.limit = 0.5
+        self.limit = 0.25
 
     def move(self, speed: float, rotation: float):
         self.speed = speed

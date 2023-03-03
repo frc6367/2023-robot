@@ -25,6 +25,7 @@ class Grabber:
         self.encoder = self.motor.getEncoder()
 
         self.pid = self.motor.getPIDController()
+        
 
         # Set PID Constants
         self.pid.setP(1)

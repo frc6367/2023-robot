@@ -36,6 +36,7 @@ class MyRobot(magicbot.MagicRobot):
 
         self.grabber_motor = rev.CANSparkMax(5, rev.CANSparkMax.MotorType.kBrushless)
         self.grabber_sensor = SharpIR2Y0A41(0)
+        self.grabber_motor.setIdleMode(rev.CANSparkMax.IdleMode.kBrake)
 
     def teleopInit(self):
         pass
@@ -53,6 +54,8 @@ class MyRobot(magicbot.MagicRobot):
             self.arm.gotoMiddle()
         elif self.stick.getRawButton(11):
             self.arm.gotoLow()
+        elif self.stick.getRawButton(10):
+            self.arm.gotoOut()
         elif self.stick.getRawButton(12):
             self.arm.gotoNeutral()
 
