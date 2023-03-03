@@ -9,7 +9,7 @@ from subsystems.arm import Arm
 
 class scoring(AutonomousStateMachine):
     MODE_NAME = "scoring"
-    DEFAULT = False
+    DEFAULT = True
 
     # Injected from the definition in robot.py
     drivetrain: DriveTrain
