@@ -8,7 +8,7 @@ class AutoLifter:
     grabber: Grabber
     arm: Arm
 
-    enable = magicbot.tunable(False)
+    enable = magicbot.tunable(True)
     activated = magicbot.will_reset_to(False)
 
     acted = False
@@ -22,10 +22,11 @@ class AutoLifter:
             and self.enable
             and self.grabber.isClosed()
             and self.grabber.isObjectSensed()
-            and self.arm.getPosition() in ("NEUTRAL", "OUT")
+            and self.arm.arm_encoder.getPosition() < self.arm.LOW_MAX
         ):
             if not self.acted:
                 self.arm.gotoLow()
                 self.acted = True
         else:
-            self.acted = False
+            if not self.grabber.isClosed():
+                self.acted = False

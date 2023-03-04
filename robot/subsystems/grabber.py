@@ -17,7 +17,7 @@ class Grabber:
     grab_open_speed = magicbot.tunable(0.2)
     grab_close_speed = magicbot.tunable(-0.4)
     grab_position = magicbot.tunable(0.0)
-    grab_threshold = magicbot.tunable(60.0)
+    grab_threshold = magicbot.tunable(40.0)
 
     grab_state = magicbot.tunable("opened")
 
@@ -80,13 +80,14 @@ class Grabber:
             # self.pid.setReference(
             #     self.grab_position, rev.CANSparkMax.ControlType.kPosition
             # )
-            self.motor.set(-0.2)
+            self.motor.set(-0.12)
             # self.pid.setReference(0.1, rev.CANSparkMax.ControlType.kCurrent)
         elif self.grab_state == "closing":
             self.motor.set(self.grab_close_speed)
             if self.grab_current_avg > self.grab_threshold:
                 self.grab_state = "closed"
                 self.grab_position = self.encoder.getPosition()
+                self.twitch = 2.5
                 print("Closed")
         elif self.grab_state == "opened":
             self.motor.set(0)
