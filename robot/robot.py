@@ -19,12 +19,14 @@ from subsystems.grabber import Grabber
 from subsystems.drivetrain import DriveTrain
 from subsystems.arm import Arm
 
+from components.auto_lifter import AutoLifter
 from components.auto_grabber import AutoGrabber
 from components.auto_balance import AutoBalance
 from components.ramsete import RamseteComponent
 
 
 class MyRobot(magicbot.MagicRobot):
+    auto_lift: AutoLifter
     auto_grab: AutoGrabber
     grabber: Grabber
     arm: Arm
@@ -115,7 +117,8 @@ class MyRobot(magicbot.MagicRobot):
         elif self.stick.getRawButton(2):
             self.grabber.release()
         else:
-            self.auto_grab.activate()
+            # self.auto_grab.activate()
+            self.auto_lift.activate()
 
 
 if __name__ == "__main__":

@@ -20,7 +20,7 @@ class Arm:
     LOW_MIN = LOW_POS - 2
     LOW_MAX = LOW_POS + 2
 
-    OUT_POS = 10
+    OUT_POS = 9
     OUT_MIN = OUT_POS - 2
     OUT_MAX = OUT_POS + 2
 

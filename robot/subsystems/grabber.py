@@ -17,7 +17,7 @@ class Grabber:
     grab_open_speed = magicbot.tunable(0.2)
     grab_close_speed = magicbot.tunable(-0.4)
     grab_position = magicbot.tunable(0.0)
-    grab_threshold = magicbot.tunable(40.0)
+    grab_threshold = magicbot.tunable(60.0)
 
     grab_state = magicbot.tunable("opened")
 
@@ -25,7 +25,6 @@ class Grabber:
         self.encoder = self.motor.getEncoder()
 
         self.pid = self.motor.getPIDController()
-        
 
         # Set PID Constants
         self.pid.setP(1)
@@ -81,7 +80,7 @@ class Grabber:
             # self.pid.setReference(
             #     self.grab_position, rev.CANSparkMax.ControlType.kPosition
             # )
-            self.motor.set(-0.1)
+            self.motor.set(-0.2)
             # self.pid.setReference(0.1, rev.CANSparkMax.ControlType.kCurrent)
         elif self.grab_state == "closing":
             self.motor.set(self.grab_close_speed)

@@ -1,0 +1,31 @@
+import magicbot
+from subsystems.arm import Arm
+
+from subsystems.grabber import Grabber
+
+
+class AutoLifter:
+    grabber: Grabber
+    arm: Arm
+
+    enable = magicbot.tunable(False)
+    activated = magicbot.will_reset_to(False)
+
+    acted = False
+
+    def activate(self):
+        self.activated = True
+
+    def execute(self):
+        if (
+            self.activated
+            and self.enable
+            and self.grabber.isClosed()
+            and self.grabber.isObjectSensed()
+            and self.arm.getPosition() in ("NEUTRAL", "OUT")
+        ):
+            if not self.acted:
+                self.arm.gotoLow()
+                self.acted = True
+        else:
+            self.acted = False
