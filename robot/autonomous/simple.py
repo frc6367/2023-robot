@@ -16,7 +16,15 @@ class scoring(AutonomousStateMachine):
     grabber: Grabber
     arm: Arm
 
-    @state(first=True)
+    @timed_state(first=True, duration=0.5, next_state="close_grabber")
+    def open_grabber(self):
+        self.grabber.release()
+
+    @timed_state(duration=0.5, next_state="raise_to_level3")
+    def close_grabber(self):
+        self.grabber.grab()
+
+    @state()
     def raise_to_level3(self):
         self.arm.gotoHi()
         if self.arm.getPosition() == "HI":
@@ -26,19 +34,15 @@ class scoring(AutonomousStateMachine):
     def move_forward(self):
         self.drivetrain.move(0.2, 0)
 
-        # self.drivetrain.move_encoder_stright(20)
-
-        # if self.drivetrain.is_at_desired_position():
-        #     self.next_state(self.release_grabber)
-
-    @timed_state(duration=1, next_state="back_up_out_the_communtiy")
+    @timed_state(duration=1, next_state="back_up_out_the_community1")
     def release_grabber(self):
         self.grabber.release()
 
-    @timed_state(duration=3)
-    def back_up_out_the_communtiy(self):
+    @timed_state(duration=2, next_state="back_up_out_the_community2")
+    def back_up_out_the_community1(self):
         self.drivetrain.move(-0.2, 0)
-        # self.drivetrain.move_encoder_backwards(-20)
 
-        # if self.drivetrain.is_at_desired_position():
-        #     breakpoint
+    @timed_state(duration=3)
+    def back_up_out_the_community2(self):
+        self.arm.gotoOut()
+        self.drivetrain.move(-0.2, 0)

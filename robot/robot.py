@@ -47,7 +47,6 @@ class MyRobot(magicbot.MagicRobot):
         self.drive_r1.setInverted(True)
         self.drive_r2.setInverted(True)
 
-<<<<<<< HEAD
         self.encoder_l = wpilib.Encoder(2, 3)
         self.encoder_r = wpilib.Encoder(0, 1)
         self.encoder_l.setDistancePerPulse(constants.kDistancePerPulse)
@@ -58,8 +57,8 @@ class MyRobot(magicbot.MagicRobot):
         self.ahrs = navx.AHRS.create_spi()
 
         # Arm
-        self.arm_motor = rev.CANSparkMax(7, rev.CANSparkMax.MotorType.kBrushless)
-        self.arm_motor2 = rev.CANSparkMax(6, rev.CANSparkMax.MotorType.kBrushless)
+        self.arm_motor = CANSparkMax(7, CANSparkMax.MotorType.kBrushless)
+        self.arm_motor2 = CANSparkMax(6, CANSparkMax.MotorType.kBrushless)
 
         # Grabber
         self.grabber_motor = rev.CANSparkMax(5, rev.CANSparkMax.MotorType.kBrushless)

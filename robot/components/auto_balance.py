@@ -17,6 +17,7 @@ class AutoBalance:
     maxOutOvercome = magicbot.tunable(0.31)
     maxR = magicbot.tunable(0.2)
 
+    # Note to self: +/- 5% should be ok for autobalance??
     fwd_angle = magicbot.tunable(2.5)
     rev_angle = magicbot.tunable(-3)
 
