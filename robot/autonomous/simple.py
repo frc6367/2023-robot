@@ -39,10 +39,14 @@ class ScoringBase(AutonomousStateMachine):
     def back_up_out_the_community1(self):
         self.drivetrain.move(-0.25, 0.07 * self.direction)
 
-    @timed_state(duration=3)
+    @timed_state(duration=3, next_state="turning")
     def back_up_out_the_community2(self):
         self.arm.gotoOut()
         self.drivetrain.move(-0.3, -0.05 * self.direction)
+
+    @timed_state(duration=2)
+    def turning(self):
+        self.drivetrain.move(0, 0.2 * self.direction)
 
 
 class ScoringLeft(ScoringBase):
