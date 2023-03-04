@@ -32,7 +32,7 @@ class MyRobot(magicbot.MagicRobot):
     autobalance: AutoBalance
     drivetrain: DriveTrain
 
-    twitch = magicbot.tunable(0.5)
+    twitch = magicbot.tunable(0.2)
 
     def createObjects(self):
         # Joysticks
