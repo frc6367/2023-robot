@@ -7,7 +7,7 @@ kTrackWidth = 0.6096
 kWheelRadius = 0.1524 / 2
 kPulsePerRevolution = 360
 kDistancePerPulse = (2 * math.pi * kWheelRadius) / kPulsePerRevolution
-
+print(kDistancePerPulse)
 # The max velocity and acceleration for our autonomous when using ramsete
 kMaxSpeedMetersPerSecond = 1
 kMaxAccelerationMetersPerSecondSquared = 0.75

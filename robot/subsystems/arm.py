@@ -8,7 +8,7 @@ class Arm:
     arm_motor: CANSparkMax
     arm_motor2: CANSparkMax
 
-    HI_POS = 66
+    HI_POS = 62
     HI_MIN = HI_POS - 2
     HI_MAX = HI_POS + 2
 
@@ -20,7 +20,7 @@ class Arm:
     LOW_MIN = LOW_POS - 2
     LOW_MAX = LOW_POS + 2
 
-    OUT_POS = 9
+    OUT_POS = 11
     OUT_MIN = OUT_POS - 2
     OUT_MAX = OUT_POS + 2
 

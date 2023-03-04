@@ -1,5 +1,7 @@
 import magicbot
 import rev
+
+import wpilib
 from robotpy_ext.common_drivers.distance_sensors import SharpIR2Y0A41
 
 
@@ -22,6 +24,8 @@ class Grabber:
     grab_state = magicbot.tunable("opened")
 
     def setup(self):
+        self.timer = wpilib.Timer()
+        self.timer.start()
         self.encoder = self.motor.getEncoder()
 
         self.pid = self.motor.getPIDController()
@@ -40,7 +44,7 @@ class Grabber:
 
     def release(self):
         if self.grab_state != "opened":
-            self.grab_state = "opening"
+            self.grab_state = "begin_opening"
 
     #
     # Feedback mathods
@@ -90,8 +94,11 @@ class Grabber:
                 print("Closed")
         elif self.grab_state == "opened":
             self.motor.set(0)
+        elif self.grab_state == "begin_opening":
+            self.timer.reset()
+            self.motor.set(self.grab_open_speed)
         elif self.grab_state == "opening":
             self.motor.set(self.grab_open_speed)
-            if self.grab_current_avg > self.grab_threshold:
+            if self.timer.get() > 0.2 and self.grab_current_avg > self.grab_threshold:
                 self.grab_state = "opened"
                 print("Opened")

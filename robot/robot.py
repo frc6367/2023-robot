@@ -96,16 +96,16 @@ class MyRobot(magicbot.MagicRobot):
         else:
             twitch = self.twitch_no_ball
 
-        speed = -self.stick.getEnhY()
-        speed = self.stick_limiter.calculate(speed)
+        speed1 = -self.stick.getEnhY()
+        speed = self.stick_limiter.calculate(speed1)
         rotation = -self.stick.getEnhTwist() * abs(twitch)
 
+        self.drivetrain.move(speed, rotation)
+
         if self.stick.getRawButton(4):
-            self.autobalance.overcome()
+            self.autobalance.overcome(speed1 * 0.5)
         elif self.stick.getRawButton(3):
             self.autobalance.maintain()
-
-        self.drivetrain.move(speed, rotation)
 
         if self.stick.getRawButton(7):
             self.arm.gotoHi()

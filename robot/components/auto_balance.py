@@ -21,6 +21,8 @@ class AutoBalance:
     fwd_angle = magicbot.tunable(2.5)
     rev_angle = magicbot.tunable(-3)
 
+    extra = magicbot.will_reset_to(0)
+
     def setup(self):
         self.pid = PIDController(self.kP, 0, 0)
         self.pid.setSetpoint(0)
@@ -38,8 +40,9 @@ class AutoBalance:
     def maintain(self):
         self._activate(self.maxOutMaintain)
 
-    def overcome(self):
-        self._activate(self.maxOutOvercome)
+    def overcome(self, n):
+        self.extra = n
+        self.maintain()
 
     def _activate(self, maxOut):
         self.active = True
@@ -70,7 +73,7 @@ class AutoBalance:
                 # else:
                 #     angle -= self.rev_angle
 
-                speed = self.pid.calculate(angle)
+                speed = self.pid.calculate(angle) + self.extra
                 maxOut = abs(self.maxOut)
                 if speed > maxOut:
                     speed = maxOut
