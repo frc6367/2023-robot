@@ -9,8 +9,8 @@ kPulsePerRevolution = 360
 kDistancePerPulse = (2 * math.pi * kWheelRadius) / kPulsePerRevolution
 
 # The max velocity and acceleration for our autonomous when using ramsete
-kMaxSpeedMetersPerSecond = 2
-kMaxAccelerationMetersPerSecondSquared = 1
+kMaxSpeedMetersPerSecond = 1
+kMaxAccelerationMetersPerSecondSquared = 0.75
 kMaxVoltage = 10
 
 kMaxCentripetalAcceleration = 1
@@ -34,4 +34,4 @@ kArmMass = 4.5  # 10 lb
 kArmGearing = 48  # actual is 208, but this feels better
 
 rdeg = Rotation2d.fromDegrees
-kStartingPose = Pose2d(2.5, 3.4, rdeg(-180))
+kStartingPose = Pose2d(2.881, 4.470, rdeg(-180))

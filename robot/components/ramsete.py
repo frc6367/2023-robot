@@ -25,7 +25,7 @@ class RamseteComponent:
     encoder_l: wpilib.Encoder
     encoder_r: wpilib.Encoder
 
-    kP = 8.5
+    kP = 8
     kI = 0
     kD = 0
 
