@@ -2,6 +2,7 @@
 
 import wpilib
 import magicbot
+from wpimath.filter import SlewRateLimiter
 
 from robotpy_ext.common_drivers.distance_sensors import SharpIR2Y0A41
 
@@ -37,6 +38,7 @@ class MyRobot(magicbot.MagicRobot):
     def createObjects(self):
         # Joysticks
         self.stick = EnhancedJoystick(0)
+        self.stick_limiter = SlewRateLimiter(3)
 
         # Drivetrain
         self.drive_l1 = ctre.WPI_TalonSRX(4)
@@ -82,11 +84,12 @@ class MyRobot(magicbot.MagicRobot):
         return self.encoder_r.getDistance()
 
     def teleopInit(self):
-        pass
+        self.stick_limiter.reset(0)
 
     def teleopPeriodic(self):
         # drivetrain logic goes first
         speed = -self.stick.getEnhY()
+        speed = self.stick_limiter.calculate(speed)
         rotation = -self.stick.getEnhTwist() * abs(self.twitch)
 
         if self.stick.getRawButton(4):
