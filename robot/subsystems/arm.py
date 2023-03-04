@@ -20,9 +20,9 @@ class Arm:
     LOW_MIN = LOW_POS - 2
     LOW_MAX = LOW_POS + 2
 
-    Out_Pos = 10
-    Out_MIN = Out_Pos - 2
-    Out_MAX = Out_Pos + 2
+    OUT_POS = 10
+    OUT_MIN = OUT_POS - 2
+    OUT_MAX = OUT_POS + 2
 
     NEUTRAL_POS = 3
     NEUTRAL_MIN = NEUTRAL_POS - 2
@@ -65,7 +65,7 @@ class Arm:
         self.gotoAngle = self.LOW_POS
 
     def gotoOut(self):
-        self.gotoAngle = self.Out_Pos
+        self.gotoAngle = self.OUT_POS
 
     def gotoNeutral(self):
         self.gotoAngle = self.NEUTRAL_POS
@@ -81,6 +81,8 @@ class Arm:
     @magicbot.feedback
     def getPosition(self):
         p = self.arm_encoder.getPosition()
+        if p > self.OUT_MIN and p < self.OUT_MAX:
+            return "OUT"
         if p > self.LOW_MIN and p < self.LOW_MAX:
             return "LOW"
         if p > self.MID_MIN and p < self.MID_MAX:

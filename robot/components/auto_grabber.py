@@ -19,6 +19,6 @@ class AutoGrabber:
             self.activated
             and self.enable
             and self.grabber.isObjectSensed()
-            and self.arm.getPosition() == "NEUTRAL"
+            and self.arm.getPosition() in ("NEUTRAL", "OUT")
         ):
             self.grabber.grab()
