@@ -27,8 +27,14 @@ class DriveTrain:
 
         self.drive = wpilib.drive.DifferentialDrive(self.drive_l1, self.drive_r1)
 
+<<<<<<< HEAD
+=======
+        # self.l_pid = wpimath.controller.ProfiledPIDController(0.1, 0, 0, self.constraints)
+        # self.r_pid = wpimath.controller.ProfiledPIDController()
+
+>>>>>>> 5e964a100a2d860cc1c6cb62cb723c094d3a9f0f
     def limit_speed(self):
-        self.limit = 0.5
+        self.limit = 0.25
 
     def move(self, speed: float, rotation: float):
         self.speed = speed

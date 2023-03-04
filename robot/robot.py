@@ -42,6 +42,7 @@ class MyRobot(magicbot.MagicRobot):
         self.drive_r1.setInverted(True)
         self.drive_r2.setInverted(True)
 
+<<<<<<< HEAD
         self.encoder_l = wpilib.Encoder(2, 3)
         self.encoder_r = wpilib.Encoder(0, 1)
         self.encoder_l.setDistancePerPulse(constants.kDistancePerPulse)
@@ -52,12 +53,17 @@ class MyRobot(magicbot.MagicRobot):
         self.ahrs = navx.AHRS.create_spi()
 
         # Arm
-        self.arm_motor = rev.CANSparkMax(6, rev.CANSparkMax.MotorType.kBrushless)
-        self.arm_motor2 = rev.CANSparkMax(7, rev.CANSparkMax.MotorType.kBrushless)
+        self.arm_motor = rev.CANSparkMax(7, rev.CANSparkMax.MotorType.kBrushless)
+        self.arm_motor2 = rev.CANSparkMax(6, rev.CANSparkMax.MotorType.kBrushless)
+=======
+        self.arm_motor = rev.CANSparkMax(7, rev.CANSparkMax.MotorType.kBrushless)
+        self.arm_motor2 = rev.CANSparkMax(6, rev.CANSparkMax.MotorType.kBrushless)
+>>>>>>> 5e964a100a2d860cc1c6cb62cb723c094d3a9f0f
 
         # Grabber
         self.grabber_motor = rev.CANSparkMax(5, rev.CANSparkMax.MotorType.kBrushless)
         self.grabber_sensor = SharpIR2Y0A41(0)
+        self.grabber_motor.setIdleMode(rev.CANSparkMax.IdleMode.kBrake)
 
     @magicbot.feedback
     def left_encoder(self) -> int:
@@ -96,6 +102,8 @@ class MyRobot(magicbot.MagicRobot):
             self.arm.gotoMiddle()
         elif self.stick.getRawButton(11):
             self.arm.gotoLow()
+        elif self.stick.getRawButton(10):
+            self.arm.gotoOut()
         elif self.stick.getRawButton(12):
             self.arm.gotoNeutral()
 

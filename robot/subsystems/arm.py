@@ -19,7 +19,11 @@ class Arm:
     LOW_MIN = LOW_POS - 2
     LOW_MAX = LOW_POS + 2
 
-    NEUTRAL_POS = 0
+    Out_Pos = 10
+    Out_MIN = Out_Pos - 2
+    Out_MAX = Out_Pos + 2
+
+    NEUTRAL_POS = 3
     NEUTRAL_MIN = NEUTRAL_POS - 2
     NEUTRAL_MAX = NEUTRAL_POS + 2
 
@@ -58,6 +62,9 @@ class Arm:
 
     def gotoLow(self):
         self.gotoAngle = self.LOW_POS
+
+    def gotoOut(self):
+        self.gotoAngle = self.Out_Pos
 
     def gotoNeutral(self):
         self.gotoAngle = self.NEUTRAL_POS
