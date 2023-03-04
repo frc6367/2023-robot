@@ -78,9 +78,10 @@ class Grabber:
         )
 
         if self.grab_state == "closed":
-            self.pid.setReference(
-                self.grab_position, rev.CANSparkMax.ControlType.kPosition
-            )
+            # self.pid.setReference(
+            #     self.grab_position, rev.CANSparkMax.ControlType.kPosition
+            # )
+            self.motor.set(-0.1)
             # self.pid.setReference(0.1, rev.CANSparkMax.ControlType.kCurrent)
         elif self.grab_state == "closing":
             self.motor.set(self.grab_close_speed)
