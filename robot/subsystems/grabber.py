@@ -87,7 +87,6 @@ class Grabber:
             if self.grab_current_avg > self.grab_threshold:
                 self.grab_state = "closed"
                 self.grab_position = self.encoder.getPosition()
-                self.twitch = 2.5
                 print("Closed")
         elif self.grab_state == "opened":
             self.motor.set(0)

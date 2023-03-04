@@ -44,7 +44,7 @@ class ScoringBase(AutonomousStateMachine):
         self.arm.gotoOut()
         self.drivetrain.move(-0.3, -0.05 * self.direction)
 
-    @timed_state(duration=2)
+    @timed_state(duration=3)
     def turning(self):
         self.drivetrain.move(0, 0.2 * self.direction)
 

@@ -28,6 +28,8 @@ kA_angular = 1.461
 # Only used for simulation
 #
 
+# robot: 32.5 by 38
+
 # Arm parameters in meters (approximate)
 kArmLength = 1.1303  # 44.5 in
 kArmMass = 4.5  # 10 lb

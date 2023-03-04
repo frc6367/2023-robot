@@ -35,7 +35,8 @@ class MyRobot(magicbot.MagicRobot):
     autobalance: AutoBalance
     drivetrain: DriveTrain
 
-    twitch = magicbot.tunable(0.3)
+    twitch_no_ball = magicbot.tunable(0.3)
+    twitch_w_ball = magicbot.tunable(0.2)
 
     def createObjects(self):
         # Joysticks
@@ -51,8 +52,8 @@ class MyRobot(magicbot.MagicRobot):
         self.drive_r1.setInverted(True)
         self.drive_r2.setInverted(True)
 
-        self.encoder_l = wpilib.Encoder(2, 3)
-        self.encoder_r = wpilib.Encoder(0, 1)
+        self.encoder_l = wpilib.Encoder(0, 1)
+        self.encoder_r = wpilib.Encoder(2, 3)
         self.encoder_l.setDistancePerPulse(constants.kDistancePerPulse)
         self.encoder_r.setDistancePerPulse(constants.kDistancePerPulse)
         self.encoder_r.setReverseDirection(True)
@@ -90,9 +91,14 @@ class MyRobot(magicbot.MagicRobot):
 
     def teleopPeriodic(self):
         # drivetrain logic goes first
+        if self.grabber.isClosed():
+            twitch = self.twitch_w_ball
+        else:
+            twitch = self.twitch_no_ball
+
         speed = -self.stick.getEnhY()
         speed = self.stick_limiter.calculate(speed)
-        rotation = -self.stick.getEnhTwist() * abs(self.twitch)
+        rotation = -self.stick.getEnhTwist() * abs(twitch)
 
         if self.stick.getRawButton(4):
             self.autobalance.overcome()
