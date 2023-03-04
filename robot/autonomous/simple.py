@@ -7,10 +7,7 @@ from subsystems.grabber import Grabber
 from subsystems.arm import Arm
 
 
-class scoring(AutonomousStateMachine):
-    MODE_NAME = "scoring"
-    DEFAULT = True
-
+class ScoringBase(AutonomousStateMachine):
     # Injected from the definition in robot.py
     drivetrain: DriveTrain
     grabber: Grabber
@@ -40,9 +37,27 @@ class scoring(AutonomousStateMachine):
 
     @timed_state(duration=2, next_state="back_up_out_the_community2")
     def back_up_out_the_community1(self):
-        self.drivetrain.move(-0.2, 0)
+        self.drivetrain.move(-0.25, 0.07 * self.direction)
 
     @timed_state(duration=3)
     def back_up_out_the_community2(self):
         self.arm.gotoOut()
-        self.drivetrain.move(-0.2, 0)
+        self.drivetrain.move(-0.3, -0.05 * self.direction)
+
+
+class ScoringLeft(ScoringBase):
+    MODE_NAME = "Scoring Left"
+    DEFAULT = False
+
+    def on_enable(self):
+        self.direction = -1
+        super().on_enable()
+
+
+class ScoringRight(ScoringBase):
+    MODE_NAME = "Scoring Right"
+    DEFAULT = True
+
+    def on_enable(self):
+        self.direction = 1
+        super().on_enable()
