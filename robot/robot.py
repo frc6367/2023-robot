@@ -38,7 +38,7 @@ class MyRobot(magicbot.MagicRobot):
     twitch_no_ball = magicbot.tunable(0.4)
     twitch_w_ball = magicbot.tunable(0.26)
 
-    adjust = magicbot.tunable(0.5)
+    adjust = magicbot.tunable(0.3)
 
     def createObjects(self):
         # Joysticks
@@ -111,6 +111,8 @@ class MyRobot(magicbot.MagicRobot):
 
         if self.stick.getRawButton(7):
             self.arm.gotoHi()
+        elif self.stick.getRawButton(8):
+            self.arm.gotoMiddle2()
         elif self.stick.getRawButton(9):
             self.arm.gotoMiddle()
         elif self.stick.getRawButton(11):
