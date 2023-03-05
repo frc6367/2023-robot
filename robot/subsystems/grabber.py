@@ -68,7 +68,7 @@ class Grabber:
 
     @magicbot.feedback
     def isObjectSensed(self):
-        return self.ball_distance() <= 9
+        return self.ball_distance() <= 12
 
     #
     # Execute
@@ -97,6 +97,7 @@ class Grabber:
         elif self.grab_state == "begin_opening":
             self.timer.reset()
             self.motor.set(self.grab_open_speed)
+            self.grab_state = "opening"
         elif self.grab_state == "opening":
             self.motor.set(self.grab_open_speed)
             if self.timer.get() > 0.2 and self.grab_current_avg > self.grab_threshold:

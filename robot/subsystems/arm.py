@@ -13,14 +13,14 @@ class Arm:
     HI_MAX = HI_POS + 2
 
     MID_POS = 53
-    MID_MIN = MID_POS - 2
-    MID_MAX = MID_POS + 2
+    MID_MIN = MID_POS - 3
+    MID_MAX = MID_POS + 3
 
     LOW_POS = 19
     LOW_MIN = LOW_POS - 2
     LOW_MAX = LOW_POS + 2
 
-    OUT_POS = 11
+    OUT_POS = 10
     OUT_MIN = OUT_POS - 2
     OUT_MAX = OUT_POS + 2
 
@@ -54,6 +54,10 @@ class Arm:
         self.pidController.setIZone(self.kIz)
         self.pidController.setFF(self.kFF)
         self.pidController.setOutputRange(self.kMinOutput, self.kMaxOutput)
+
+    @magicbot.feedback
+    def encoder_pos(self):
+        return self.arm_encoder.getPosition()
 
     def gotoHi(self):
         self.gotoAngle = self.HI_POS

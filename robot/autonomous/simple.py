@@ -21,9 +21,9 @@ class ScoringBase(AutonomousStateMachine):
     def close_grabber(self):
         self.grabber.grab()
 
-    @state()
+    @timed_state(duration=3, next_state="move_forward")
     def raise_to_level3(self):
-        self.arm.gotoHi()
+        self.arm.gotoMiddle()
         if self.arm.getPosition() == "HI":
             self.next_state(self.move_forward)
 

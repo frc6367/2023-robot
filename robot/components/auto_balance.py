@@ -12,13 +12,13 @@ class AutoBalance:
 
     active = magicbot.will_reset_to(False)
 
-    kP = magicbot.tunable(0.3)
-    maxOutMaintain = magicbot.tunable(0.2)
+    kP = magicbot.tunable(0.1)
+    maxOutMaintain = magicbot.tunable(0.15)
     maxOutOvercome = magicbot.tunable(0.31)
     maxR = magicbot.tunable(0.2)
 
     # Note to self: +/- 5% should be ok for autobalance??
-    fwd_angle = magicbot.tunable(2.5)
+    fwd_angle = magicbot.tunable(3)
     rev_angle = magicbot.tunable(-3)
 
     extra = magicbot.will_reset_to(0)
@@ -73,20 +73,22 @@ class AutoBalance:
                 # else:
                 #     angle -= self.rev_angle
 
-                speed = self.pid.calculate(angle) + self.extra
+                speed = self.pid.calculate(angle)
                 maxOut = abs(self.maxOut)
                 if speed > maxOut:
                     speed = maxOut
                 elif speed < -maxOut:
                     speed = -maxOut
 
-                rotation = -self.turnController.calculate(self.ahrs.getYaw())
-                maxR = abs(self.maxR)
-                if rotation > maxR:
-                    rotation = maxR
-                elif rotation < -maxR:
-                    rotation = -maxR
+                speed = speed + self.extra
 
-                self.drivetrain.move(speed, rotation)
+                # rotation = -self.turnController.calculate(self.ahrs.getYaw())
+                # maxR = abs(self.maxR)
+                # if rotation > maxR:
+                #     rotation = maxR
+                # elif rotation < -maxR:
+                #     rotation = -maxR
+
+                self.drivetrain.move(speed, 0)
 
         self.was_active = self.active

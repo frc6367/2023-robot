@@ -35,8 +35,10 @@ class MyRobot(magicbot.MagicRobot):
     autobalance: AutoBalance
     drivetrain: DriveTrain
 
-    twitch_no_ball = magicbot.tunable(0.3)
-    twitch_w_ball = magicbot.tunable(0.2)
+    twitch_no_ball = magicbot.tunable(0.4)
+    twitch_w_ball = magicbot.tunable(0.26)
+
+    adjust = magicbot.tunable(0.5)
 
     def createObjects(self):
         # Joysticks
@@ -102,10 +104,10 @@ class MyRobot(magicbot.MagicRobot):
 
         self.drivetrain.move(speed, rotation)
 
-        if self.stick.getRawButton(4):
-            self.autobalance.overcome(speed1 * 0.5)
-        elif self.stick.getRawButton(3):
-            self.autobalance.maintain()
+        if self.stick.getRawButton(3):
+            self.autobalance.overcome(speed1 * self.adjust)
+        # elif self.stick.getRawButton(4):
+        #     self.autobalance.maintain()
 
         if self.stick.getRawButton(7):
             self.arm.gotoHi()
@@ -113,9 +115,9 @@ class MyRobot(magicbot.MagicRobot):
             self.arm.gotoMiddle()
         elif self.stick.getRawButton(11):
             self.arm.gotoLow()
-        elif self.stick.getRawButton(10):
-            self.arm.gotoOut()
         elif self.stick.getRawButton(12):
+            self.arm.gotoOut()
+        elif self.stick.getRawButton(10):
             self.arm.gotoNeutral()
 
         if self.stick.getRawButton(1):
