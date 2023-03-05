@@ -16,6 +16,10 @@ class Arm:
     MID_MIN = MID_POS - 3
     MID_MAX = MID_POS + 3
 
+    MID2_POS = 45
+    MID2_MIN = MID2_POS - 3
+    MID2_MAX = MID2_POS + 3
+
     LOW_POS = 19
     LOW_MIN = LOW_POS - 2
     LOW_MAX = LOW_POS + 2
@@ -65,6 +69,9 @@ class Arm:
     def gotoMiddle(self):
         self.gotoAngle = self.MID_POS
 
+    def gotoMiddle2(self):
+        self.gotoAngle = self.MID2_POS
+
     def gotoLow(self):
         self.gotoAngle = self.LOW_POS
 
@@ -91,6 +98,8 @@ class Arm:
             return "LOW"
         if p > self.MID_MIN and p < self.MID_MAX:
             return "MID"
+        if p > self.MID2_MIN and p < self.MID2_MAX:
+            return "MID2"
         if p > self.HI_MIN and p < self.HI_MAX:
             return "HI"
         if p > self.NEUTRAL_MIN and p < self.NEUTRAL_MAX:
