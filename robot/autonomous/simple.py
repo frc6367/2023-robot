@@ -6,12 +6,20 @@ from subsystems.drivetrain import DriveTrain
 from subsystems.grabber import Grabber
 from subsystems.arm import Arm
 
+from components.auto_balance import AutoBalance
+
 
 class ScoringBase(AutonomousStateMachine):
     # Injected from the definition in robot.py
     drivetrain: DriveTrain
     grabber: Grabber
     arm: Arm
+    autobalance: AutoBalance
+
+    encoder_l: wpilib.Encoder
+    encoder_r: wpilib.Encoder
+
+    do_autobalance = False
 
     @timed_state(first=True, duration=0.5, next_state="close_grabber")
     def open_grabber(self):
@@ -42,22 +50,56 @@ class ScoringBase(AutonomousStateMachine):
     def move_forward_less(self):
         self.drivetrain.move(0.2, 0)
 
-    @timed_state(duration=1, next_state="back_up_out_the_community1")
+    @timed_state(duration=1, next_state="initial_backup")
     def release_grabber(self):
         self.grabber.release()
 
-    @timed_state(duration=2, next_state="back_up_out_the_community2")
-    def back_up_out_the_community1(self):
+    @timed_state(duration=2, next_state="back_up")
+    def initial_backup(self):
         self.drivetrain.move(-0.25, 0.07 * self.direction)
 
+    @state()
+    def back_up(self):
+        if self.do_autobalance:
+            self.next_state_now(self.wait_for_autobalance)
+        else:
+            self.next_state_now(self.back_up_out_the_community)
+
+    #
+    # Community + turning
+    #
+
     @timed_state(duration=3, next_state="turning")
-    def back_up_out_the_community2(self):
+    def back_up_out_the_community(self):
         self.arm.gotoOut()
         self.drivetrain.move(-0.3, -0.05 * self.direction)
 
     @timed_state(duration=3)
     def turning(self):
         self.drivetrain.move(0, 0.2 * self.direction)
+
+    #
+    # Autobalance
+    #
+
+    @timed_state(duration=2, next_state="ramp_up")
+    def wait_for_autobalance(self):
+        self.arm.gotoNeutral()
+
+    @timed_state(duration=3)
+    def ramp_up(self, initial_call: bool):
+        if initial_call:
+            self.encoder_l.reset()
+
+        self.drivetrain.move(-0.35)
+
+        # hack
+        if self.encoder_l.getDistance() > 1:
+            self.next_state_now(self.maintain)
+
+    @state()
+    def maintain(self):
+        self.autobalance.maintain()
 
 
 class ScoringLeft(ScoringBase):
@@ -96,5 +138,27 @@ class ScoringMidRight(ScoringBase):
 
     def on_enable(self):
         self.direction = 1
+        self.level = "MID2"
+        super().on_enable()
+
+
+class ScoringHiAB(ScoringBase):
+    MODE_NAME = "Scoring HI Balance"
+    DEFAULT = False
+    do_autobalance = True
+
+    def on_enable(self):
+        self.direction = 0
+        self.level = "MID"
+        super().on_enable()
+
+
+class ScoringMidAB(ScoringBase):
+    MODE_NAME = "Scoring MID Balance"
+    DEFAULT = False
+    do_autobalance = True
+
+    def on_enable(self):
+        self.direction = 0
         self.level = "MID2"
         super().on_enable()
