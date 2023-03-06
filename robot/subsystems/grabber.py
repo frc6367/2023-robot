@@ -16,12 +16,12 @@ class Grabber:
     grab_current = magicbot.tunable(0.0)
     grab_current_avg = magicbot.tunable(0.0)
 
-    grab_open_speed = magicbot.tunable(0.2)
+    grab_open_speed = magicbot.tunable(0.15)
     grab_close_speed = magicbot.tunable(-0.4)
     grab_position = magicbot.tunable(0.0)
     grab_threshold = magicbot.tunable(40.0)
 
-    grab_state = magicbot.tunable("opened")
+    grab_state = magicbot.tunable("")
 
     def setup(self):
         self.timer = wpilib.Timer()
@@ -42,8 +42,8 @@ class Grabber:
         if self.grab_state != "closed":
             self.grab_state = "closing"
 
-    def release(self):
-        if self.grab_state != "opened":
+    def release(self, force=False):
+        if force or self.grab_state != "opened":
             self.grab_state = "begin_opening"
 
     #

@@ -21,13 +21,17 @@ class ScoringBase(AutonomousStateMachine):
 
     do_autobalance = False
 
-    @timed_state(first=True, duration=0.5, next_state="close_grabber")
+    @timed_state(first=True, duration=0.25, next_state="close_grabber")
     def open_grabber(self):
-        self.grabber.release()
+        self.grabber.release(force=True)
 
-    @timed_state(duration=0.5, next_state="raise_to_level3")
+    @timed_state(duration=0.5, next_state="wait")
     def close_grabber(self):
         self.grabber.grab()
+
+    @timed_state(duration=0.5, next_state="raise_to_level3")
+    def wait(self):
+        pass
 
     @timed_state(duration=3, next_state="move_forward")
     def raise_to_level3(self):
@@ -86,15 +90,15 @@ class ScoringBase(AutonomousStateMachine):
     def wait_for_autobalance(self):
         self.arm.gotoNeutral()
 
-    @timed_state(duration=3)
+    @timed_state(duration=6)
     def ramp_up(self, initial_call: bool):
         if initial_call:
             self.encoder_l.reset()
 
-        self.drivetrain.move(-0.35)
+        self.drivetrain.move(-0.4, 0)
 
         # hack
-        if self.encoder_l.getDistance() > 1:
+        if self.encoder_l.getDistance() > 1.35:
             self.next_state_now(self.maintain)
 
     @state()
