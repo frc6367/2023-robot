@@ -43,7 +43,8 @@ class MyRobot(magicbot.MagicRobot):
     def createObjects(self):
         # Joysticks
         self.stick = EnhancedJoystick(0)
-        self.stick_limiter = SlewRateLimiter(3)
+        self.speed_limiter = SlewRateLimiter(3)
+        self.twist_limiter = SlewRateLimiter(0.5)
 
         # Drivetrain
         self.drive_l1 = ctre.WPI_TalonSRX(4)
@@ -92,7 +93,7 @@ class MyRobot(magicbot.MagicRobot):
         return self.encoder_r.getDistance()
 
     def teleopInit(self):
-        self.stick_limiter.reset(0)
+        self.speed_limiter.reset(0)
 
     def teleopPeriodic(self):
         # drivetrain logic goes first
@@ -102,8 +103,9 @@ class MyRobot(magicbot.MagicRobot):
             twitch = self.twitch_no_ball
 
         speed1 = -self.stick.getEnhY()
-        speed = self.stick_limiter.calculate(speed1)
+        speed = self.speed_limiter.calculate(speed1)
         rotation = -self.stick.getEnhTwist() * abs(twitch)
+        rotation = self.twist_limiter.calculate(rotation)
 
         self.drivetrain.move(speed, rotation)
 
