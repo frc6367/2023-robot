@@ -67,6 +67,9 @@ class MyRobot(magicbot.MagicRobot):
         self.arm_motor = CANSparkMax(7, CANSparkMax.MotorType.kBrushless)
         self.arm_motor2 = CANSparkMax(6, CANSparkMax.MotorType.kBrushless)
 
+        self.arm_motor.setIdleMode(rev.CANSparkMax.IdleMode.kBrake)
+        self.arm_motor2.setIdleMode(rev.CANSparkMax.IdleMode.kBrake)
+
         # Grabber
         self.grabber_motor = rev.CANSparkMax(5, rev.CANSparkMax.MotorType.kBrushless)
         self.grabber_sensor = SharpIR2Y0A41(0)
