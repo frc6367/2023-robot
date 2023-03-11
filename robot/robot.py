@@ -97,7 +97,7 @@ class MyRobot(magicbot.MagicRobot):
 
     def teleopPeriodic(self):
         # drivetrain logic goes first
-        if self.grabber.isClosed():
+        if self.grabber.isObjectSensed():
             twitch = self.twitch_w_ball
         else:
             twitch = self.twitch_no_ball
