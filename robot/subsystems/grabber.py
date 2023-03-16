@@ -16,7 +16,7 @@ class Grabber:
     grab_current = magicbot.tunable(0.0)
     grab_current_avg = magicbot.tunable(0.0)
 
-    grab_open_speed = magicbot.tunable(1)
+    grab_open_speed = magicbot.tunable(0.1)
     grab_close_speed = magicbot.tunable(-1)
     grab_position = magicbot.tunable(0.0)
     grab_threshold = magicbot.tunable(40.0)
