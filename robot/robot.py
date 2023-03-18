@@ -129,6 +129,8 @@ class MyRobot(magicbot.MagicRobot):
             self.grabber.grab()
         elif self.stick.getRawButton(2):
             self.grabber.release()
+        elif self.stick.getRawButton(5):
+            self.grabber.lower_release
         else:
             # self.auto_grab.activate()
             self.auto_lift.activate()

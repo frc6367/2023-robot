@@ -18,6 +18,7 @@ class Grabber:
 
     grab_open_speed = magicbot.tunable(0.1)
     grab_close_speed = magicbot.tunable(-1)
+    grab_lower_open_speed = magicbot.tunable(1)
     grab_position = magicbot.tunable(0.0)
     grab_threshold = magicbot.tunable(40.0)
 
@@ -49,6 +50,9 @@ class Grabber:
         # if force or self.grab_state != "opened":
         #     self.grab_state = "begin_opening"
         self.speed = self.grab_open_speed
+
+    def lower_release(self, force=False):
+        self.speed = self.grab_lower_open_speed
 
     #
     # Feedback mathods
