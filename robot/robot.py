@@ -111,10 +111,8 @@ class MyRobot(magicbot.MagicRobot):
 
         if self.stick.getRawButton(7):
             self.arm.gotoHi()
-        elif self.stick.getRawButton(8):
-            self.arm.gotoMiddle2()
         elif self.stick.getRawButton(9):
-            self.arm.gotoMiddle()
+            self.arm.gotoMiddle2()
         elif self.stick.getRawButton(11):
             self.arm.gotoLow()
         elif self.stick.getRawButton(12):
