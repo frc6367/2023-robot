@@ -22,7 +22,7 @@ class AutoLifter:
             and self.enable
             and self.grabber.isClosed()
             and self.grabber.isObjectSensed()
-            and self.arm.arm_encoder.getPosition() < self.arm.LOW_MAX
+            and self.arm.getAngleRad() < self.arm.LOW_MAX
         ):
             if not self.acted:
                 self.arm.gotoLow()
