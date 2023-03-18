@@ -21,19 +21,19 @@ class ScoringBase(AutonomousStateMachine):
 
     do_autobalance = False
 
-    @timed_state(first=True, duration=0.25, next_state="close_grabber")
-    def open_grabber(self):
-        self.grabber.release(force=True)
+    # @timed_state(first=True, duration=0.25, next_state="close_grabber")
+    # def open_grabber(self):
+    #     self.grabber.release(force=True)
 
-    @timed_state(duration=0.5, next_state="wait")
-    def close_grabber(self):
-        self.grabber.grab()
+    # @timed_state(duration=0.5, next_state="wait")
+    # def close_grabber(self):
+    #     self.grabber.grab()
 
-    @timed_state(duration=0.5, next_state="raise_to_level3")
-    def wait(self):
-        pass
+    # @timed_state(duration=0.5, next_state="raise_to_level3")
+    # def wait(self):
+    #     pass
 
-    @timed_state(duration=3, next_state="move_forward")
+    @timed_state(first=True, duration=3, next_state="move_forward")
     def raise_to_level3(self):
         if self.level == "MID":
             self.arm.gotoMiddle()

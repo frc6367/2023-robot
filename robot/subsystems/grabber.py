@@ -51,7 +51,7 @@ class Grabber:
         #     self.grab_state = "begin_opening"
         self.speed = self.grab_open_speed
 
-    def lower_release(self, force=False):
+    def lower_release(self):
         self.speed = self.grab_lower_open_speed
 
     #

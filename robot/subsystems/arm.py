@@ -35,7 +35,7 @@ class Arm:
     OUT_MIN = OUT_POS - math.radians(2)
     OUT_MAX = OUT_POS + math.radians(2)
 
-    NEUTRAL_POS = math.radians(-87)
+    NEUTRAL_POS = math.radians(-90)
     NEUTRAL_MIN = NEUTRAL_POS - math.radians(2)
     NEUTRAL_MAX = NEUTRAL_POS + math.radians(2)
 
