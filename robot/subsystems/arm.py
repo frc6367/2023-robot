@@ -45,7 +45,7 @@ class Arm:
         self.arm_motor.restoreFactoryDefaults()
         self.arm_encoder = self.arm_motor.getEncoder()
         # print("conversion", self.arm_encoder.getPositionConversionFactor())
-        self.arm_encoder.setPositionConversionFactor(90 / 2800.0)
+        # self.arm_encoder.setPositionConversionFactor(90 / 2800.0)
 
         self.arm_motor2.follow(self.arm_motor, True)
 

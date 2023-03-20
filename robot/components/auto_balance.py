@@ -118,6 +118,16 @@ class AutoBalance:
 
         else:
             return 0
+        
+    def execute(self):
+        if (
+            self.getPitch
+            and self.getRoll
+            and self.getTilt
+            and self.secondsToTicks
+        ):
+            self.autoBalanceRoutine
+   
 
 
 # import magicbot
