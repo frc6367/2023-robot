@@ -109,7 +109,7 @@ class MyRobot(magicbot.MagicRobot):
 
         self.drivetrain.move(speed, rotation)
 
-        if self.stick.getRawButton(3):
+        if self.stick.getRawButton(6):
             self.autobalance.overcome(speed1 * self.adjust)
         # elif self.stick.getRawButton(4):
         #     self.autobalance.maintain()
