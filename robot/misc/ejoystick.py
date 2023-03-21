@@ -17,7 +17,7 @@ class EnhancedJoystick(wpilib.Joystick):
 
     def getEnhY(self) -> float:
         y = super().getY()
-        scale = 0.8
+        scale = 1
         if y < -self.t:
             return scale * (self.m * y - self.b)
 
@@ -28,7 +28,7 @@ class EnhancedJoystick(wpilib.Joystick):
 
     def getEnhTwist(self):
         z = super().getZ()
-        scale = 0.8
+        scale = 1
 
         if z < -self.tTwist:
             return scale * (self.mTwist * z - self.bTwist)
