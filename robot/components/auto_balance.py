@@ -1,3 +1,5 @@
+import math
+
 import magicbot
 
 import navx
@@ -18,8 +20,8 @@ class AutoBalance:
     maxR = magicbot.tunable(0.2)
 
     # Note to self: +/- 5% should be ok for autobalance??
-    fwd_angle = magicbot.tunable(3)
-    rev_angle = magicbot.tunable(-3)
+    fwd_angle = magicbot.tunable(4)
+    rev_angle = magicbot.tunable(-4)
 
     extra = magicbot.will_reset_to(0)
 
@@ -62,6 +64,15 @@ class AutoBalance:
     @magicbot.feedback
     def get_yaw(self):
         return self.ahrs.getYaw()
+
+    # @magicbot.feedback
+    # def get_tilt(self) -> float:
+    #     pitch = self.ahrs.getPitch()
+    #     roll = self.ahrs.getRoll()
+    #     # if pitch + roll >= 0:
+    #     return abs(math.hypot(pitch, roll))
+    #     # else:
+    #     #     return -math.hypot(pitch, roll)
 
     def execute(self):
         if self.active:
