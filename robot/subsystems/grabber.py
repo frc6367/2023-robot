@@ -4,10 +4,13 @@ import rev
 import wpilib
 from robotpy_ext.common_drivers.distance_sensors import SharpIR2Y0A41
 
+from misc.led_controller import LEDController
+
 
 class Grabber:
     motor: rev.CANSparkMax
     sensor: SharpIR2Y0A41
+    led: LEDController
 
     #
     # Action methods
@@ -86,6 +89,14 @@ class Grabber:
         )
 
         self.motor.set(self.speed)
+
+        distance = self.ball_distance()
+        if distance <= 12:
+            self.led.indicateHasCube()
+        elif distance <= 16:
+            self.led.indicateAlmostCube()
+        elif distance <= 20:
+            self.led.indicateMaybeCube()
 
         # if self.grab_state == "closed":
         #     # self.pid.setReference(
