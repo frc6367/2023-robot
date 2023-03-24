@@ -20,7 +20,6 @@ class AutoLifter:
         if (
             self.activated
             and self.enable
-            and self.grabber.isClosed()
             and self.grabber.isObjectSensed()
             and self.arm.getAngleRad() < self.arm.LOW_MAX
         ):
@@ -28,5 +27,5 @@ class AutoLifter:
                 self.arm.gotoLow()
                 self.acted = True
         else:
-            if not self.grabber.isClosed():
+            if not self.grabber.isObjectSensed():
                 self.acted = False
