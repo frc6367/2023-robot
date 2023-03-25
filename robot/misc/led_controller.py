@@ -19,18 +19,20 @@ ELECTROLIGHTS_PURPLE = wpilib.Color8Bit(wpilib.Color.kPurple)
 
 
 class LEDController:
-
     color = magicbot.will_reset_to(ELECTROLIGHTS_PURPLE)
 
     def __init__(self) -> None:
         if CANLight:
+            print("LED present")
             self.light = CANLight(3)
 
             # register colors with the controller that we can reference by index
             self.light.writeRegister(0, 2, ELECTROLIGHTS_BLUE)
             self.light.writeRegister(1, 2, ELECTROLIGHTS_PURPLE)
+            self.light.writeRegister(2, 2, RED)
 
         else:
+            print("LED not present")
             self.light = None
 
     def disabledPeriodic(self):
@@ -39,9 +41,9 @@ class LEDController:
 
         alliance = wpilib.DriverStation.getAlliance()
         if alliance == wpilib.DriverStation.Alliance.kBlue:
-            self.light.showRGB(BLUE)
+            self.light.fade(0, 1)
         elif alliance == wpilib.DriverStation.Alliance.kRed:
-            self.light.showRGB(RED)
+            self.light.fade(1, 2)
         else:
             # fade between electrolights blue/purple
             self.light.fade(0, 1)
