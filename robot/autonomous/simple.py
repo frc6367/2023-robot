@@ -139,7 +139,7 @@ class ScoringBase(AutonomousStateMachine):
     @state
     def back_up_over_ramp(self):
         self.arm.gotoNeutral()
-        self.drivetrain.move(-0.2, 0)
+        self.drivetrain.move(-0.3, 0)
 
         # exit when tilt is detected
         if self.autobalance.get_angle() > 12:
@@ -160,15 +160,15 @@ class ScoringBase(AutonomousStateMachine):
         # Note to self: I think these numbers are too small,
         # but probably we want a pid based overcome instead
         if angle > 8:
-            self.autobalance.overcome(-0.05)
+            self.autobalance.overcome(-0.1)
         elif angle > 5:
-            self.autobalance.overcome(-0.02)
+            self.autobalance.overcome(-0.05)
             self.debounce = 0
         elif angle < -8:
-            self.autobalance.overcome(0.05)
+            self.autobalance.overcome(0.1)
             self.debounce = 0
         elif angle < -5:
-            self.autobalance.overcome(0.02)
+            self.autobalance.overcome(0.05)
             self.debounce = 0
         else:
             self.autobalance.maintain()
