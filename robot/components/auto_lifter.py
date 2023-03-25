@@ -21,6 +21,7 @@ class AutoLifter:
             self.activated
             and self.enable
             and self.grabber.isObjectSensed()
+            and self.grabber.isClosing()
             and self.arm.getAngleRad() < self.arm.LOW_MAX
         ):
             if not self.acted:

@@ -19,9 +19,9 @@ class Grabber:
     grab_current = magicbot.tunable(0.0)
     grab_current_avg = magicbot.tunable(0.0)
 
-    grab_open_speed = magicbot.tunable(0.1)
-    grab_close_speed = magicbot.tunable(-1)
-    grab_lower_open_speed = magicbot.tunable(1)
+    grab_open_speed = magicbot.tunable(0.2)
+    grab_close_speed = magicbot.tunable(-1.0)
+    grab_lower_open_speed = magicbot.tunable(1.0)
     grab_position = magicbot.tunable(0.0)
     grab_threshold = magicbot.tunable(40.0)
 
@@ -70,9 +70,9 @@ class Grabber:
     #     pass
 
     @magicbot.feedback
-    def isClosed(self):
+    def isClosing(self):
         # return self.grab_state == "closed"
-        return False
+        return self.speed < 0
 
     @magicbot.feedback
     def isObjectSensed(self):
@@ -93,9 +93,9 @@ class Grabber:
         distance = self.ball_distance()
         if distance <= 12:
             self.led.indicateHasCube()
-        elif distance <= 16:
-            self.led.indicateAlmostCube()
         elif distance <= 20:
+            self.led.indicateAlmostCube()
+        elif distance <= 30:
             self.led.indicateMaybeCube()
 
         # if self.grab_state == "closed":
