@@ -1,8 +1,8 @@
 import math
 
 import magicbot
-import wpilib.drive
 
+from misc.led_controller import LEDController
 from misc.sparksim import CANSparkMax
 
 # NINETY_RAD = math.radians(90)
@@ -12,15 +12,21 @@ class Arm:
     arm_motor: CANSparkMax
     arm_motor2: CANSparkMax
 
+    led: LEDController
+
     HI_POS = 62
     HI_MIN = HI_POS - 2
     HI_MAX = HI_POS + 2
 
-    MID_POS = 56
-    MID_MIN = MID_POS - 3
-    MID_MAX = MID_POS + 3
+    HI2_POS = 59
+    HI2_MIN = HI2_POS - 2
+    HI2_MAX = HI2_POS + 2
 
-    MID2_POS = 45
+    MID_POS = 58
+    MID_MIN = MID_POS - 2
+    MID_MAX = MID_POS + 2
+
+    MID2_POS = 47
     MID2_MIN = MID2_POS - 3
     MID2_MAX = MID2_POS + 3
 
@@ -43,13 +49,13 @@ class Arm:
 
         self.pidController = self.arm_motor.getPIDController()
 
-        self.kP = 0.1
+        self.kP = 0.2
         self.kI = 0
-        self.kD = 0
+        self.kD = 0.01
         self.kIz = 0
         self.kFF = 0
-        self.kMinOutput = -0.3
-        self.kMaxOutput = 0.3
+        self.kMinOutput = -0.4
+        self.kMaxOutput = 0.4
 
         self.gotoAngle = 0
 
@@ -92,6 +98,9 @@ class Arm:
 
     def gotoNeutral(self):
         self.gotoAngle = self.NEUTRAL_POS
+
+    def gotoHi2(self):
+        self.gotoAngle = self.HI2_POS
 
     #
     # Feedback mathods
@@ -141,3 +150,6 @@ class Arm:
         self.pidController.setReference(
             self.gotoAngle, CANSparkMax.ControlType.kPosition
         )
+
+        if self.arm_encoder.getPosition() > self.OUT_MIN:
+            self.led.indicateArmUp()

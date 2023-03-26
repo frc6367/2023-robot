@@ -11,6 +11,8 @@ except ImportError:
 RED = wpilib.Color8Bit(wpilib.Color.kRed)
 BLUE = wpilib.Color8Bit(wpilib.Color.kBlue)
 GREEN = wpilib.Color8Bit(wpilib.Color.kGreen)
+PINK = wpilib.Color8Bit(wpilib.Color.kPink)
+ORANGE = wpilib.Color8Bit(wpilib.Color.kOrange)
 YELLOW = wpilib.Color8Bit(wpilib.Color.kYellow)
 YELLOWGREEN = wpilib.Color8Bit(wpilib.Color.kYellowGreen)
 
@@ -56,6 +58,9 @@ class LEDController:
 
     def indicateAlmostCube(self):
         self.color = YELLOWGREEN
+
+    def indicateArmUp(self):
+        self.color = RED
 
     # TODO: add robot autobalance indicators
 

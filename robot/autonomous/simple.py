@@ -2,6 +2,7 @@ import math
 
 from magicbot import AutonomousStateMachine, timed_state, state
 import wpilib
+from wpimath.filter import SlewRateLimiter
 
 # this is one of your components
 from subsystems.drivetrain import DriveTrain
@@ -53,7 +54,7 @@ class ScoringBase(AutonomousStateMachine):
 
         self.drivetrain.move(0.2, 0)
 
-    @timed_state(duration=0.6, next_state="release_grabber")
+    @timed_state(duration=1, next_state="release_grabber")
     def move_forward_less(self):
         self.drivetrain.move(0.2, 0)
 
@@ -71,6 +72,7 @@ class ScoringBase(AutonomousStateMachine):
 
     @state()
     def back_up(self):
+        self.grabber.release()
         if self.do_autobalance1:
             self.next_state_now(self.wait_for_autobalance)
         else:
@@ -80,8 +82,9 @@ class ScoringBase(AutonomousStateMachine):
     # Community + turning
     #
 
-    @timed_state(duration=3, next_state="turning")
+    @timed_state(duration=4, next_state="turning")
     def back_up_out_the_community(self):
+        self.grabber.release()
         self.arm.gotoOut()
         self.drivetrain.move(-0.3, -0.05 * self.direction)
 
@@ -139,7 +142,7 @@ class ScoringBase(AutonomousStateMachine):
     @state
     def back_up_over_ramp(self):
         self.arm.gotoNeutral()
-        self.drivetrain.move(-0.3, 0)
+        self.drivetrain.move(-0.4, 0)
 
         # exit when tilt is detected
         if self.autobalance.get_angle() > 12:
@@ -147,32 +150,54 @@ class ScoringBase(AutonomousStateMachine):
 
     @state
     def ab_drive_up_ramp(self):
-        self.drivetrain.move(-0.2, 0)
+        self.arm.gotoLow()
+        self.drivetrain.move(-0.3, 0)
         angle = self.autobalance.get_angle()
-        if angle < 12:
-            if self.next_state_debounced(self.equalize):
+        if angle < 14:
+            if self.next_state_debounced(self.falling):
                 print("equalize at", angle)
 
     @state
-    def equalize(self):
+    def falling(self):
+        self.drivetrain.move(0.25, 0)
+        angle = self.autobalance.get_angle()
+        if angle < 4:
+            self.next_state_now(self.equalize)
+
+    @state
+    def equalize(self, initial_call: bool):
+        if initial_call:
+            self.limiter = SlewRateLimiter(0.2)
+
         angle = self.autobalance.get_angle()
 
         # Note to self: I think these numbers are too small,
         # but probably we want a pid based overcome instead
         if angle > 8:
-            self.autobalance.overcome(-0.1)
+            self.drivetrain.move(-0.25, 0)
         elif angle > 5:
-            self.autobalance.overcome(-0.05)
-            self.debounce = 0
+            self.drivetrain.move(-0.15, 0)
         elif angle < -8:
-            self.autobalance.overcome(0.1)
-            self.debounce = 0
+            self.drivetrain.move(0.25, 0)
         elif angle < -5:
-            self.autobalance.overcome(0.05)
-            self.debounce = 0
+            self.drivetrain.move(0.15, 0)
         else:
-            self.autobalance.maintain()
-            self.next_state_debounced(self.maintain, 25)
+            pass
+
+        # if angle > 8:
+        #     self.autobalance.overcome(self.limiter.calculate(-0.1))
+        # elif angle > 5:
+        #     self.autobalance.overcome(self.limiter.calculate(-0.05))
+        #     self.debounce = 0
+        # elif angle < -8:
+        #     self.autobalance.overcome(self.limiter.calculate(0.1))
+        #     self.debounce = 0
+        # elif angle < -5:
+        #     self.autobalance.overcome(self.limiter.calculate(0.05))
+        #     self.debounce = 0
+        # else:
+        #     self.autobalance.maintain()
+        #     self.next_state_debounced(self.maintain, 25)
 
     # @timed_state(duration=0.5, next_state="back_up_over_ramp")
     # def start_new_autobalance(self, initial_call: bool):

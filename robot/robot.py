@@ -26,11 +26,21 @@ from components.auto_balance import AutoBalance
 from components.ramsete import RamseteComponent
 
 
+def map_range(x, a, b, c, d):
+    y = (x - a) / (b - a) * (d - c) + c
+    return y
+
+
+def twitch_range(y):
+    return map_range(y, -1.0, 1.0, 0.5, 0.25)
+
+
 class MyRobot(magicbot.MagicRobot):
     auto_lift: AutoLifter
     auto_grab: AutoGrabber
-    grabber: Grabber
+
     arm: Arm
+    grabber: Grabber
 
     ramsete: RamseteComponent
     autobalance: AutoBalance
@@ -38,7 +48,7 @@ class MyRobot(magicbot.MagicRobot):
 
     led: LEDController
 
-    twitch_no_ball = magicbot.tunable(0.4)
+    twitch_no_ball = magicbot.tunable(0.5)
     twitch_w_ball = magicbot.tunable(0.26)
 
     adjust = magicbot.tunable(0.3)
@@ -103,10 +113,11 @@ class MyRobot(magicbot.MagicRobot):
 
     def teleopPeriodic(self):
         # drivetrain logic goes first
-        if self.grabber.isObjectSensed():
-            twitch = self.twitch_w_ball
-        else:
-            twitch = self.twitch_no_ball
+        # if self.grabber.isObjectSensed():
+        #     twitch = self.twitch_w_ball
+        # else:
+        #     twitch = self.twitch_no_ball
+        twitch = twitch_range(self.stick.getRawAxis(3))
 
         speed1 = -self.stick.getEnhY()
         speed = self.speed_limiter.calculate(speed1)
@@ -130,6 +141,8 @@ class MyRobot(magicbot.MagicRobot):
             self.arm.gotoOut()
         elif self.stick.getRawButton(10):
             self.arm.gotoNeutral()
+        elif self.stick.getRawButton(8):
+            self.arm.gotoHi2()
 
         if self.stick.getRawButton(1):
             self.grabber.grab()

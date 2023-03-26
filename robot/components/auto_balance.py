@@ -15,6 +15,7 @@ class AutoBalance:
     active = magicbot.will_reset_to(False)
 
     kP = magicbot.tunable(0.1)
+    kD = magicbot.tunable(0)
     maxOutMaintain = magicbot.tunable(0.15)
     maxOutOvercome = magicbot.tunable(0.31)
     maxR = magicbot.tunable(0.2)
@@ -26,14 +27,14 @@ class AutoBalance:
     extra = magicbot.will_reset_to(0)
 
     def setup(self):
-        self.pid = PIDController(self.kP, 0, 0)
+        self.pid = PIDController(self.kP, 0, self.kD)
         self.pid.setSetpoint(0)
         self.was_active = False
 
         turnController = PIDController(
             0.03,
             0,
-            0.0,
+            0,
         )
         turnController.enableContinuousInput(-180.0, 180.0)
         turnController.setTolerance(2)
