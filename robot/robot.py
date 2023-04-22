@@ -13,6 +13,7 @@ import rev
 import constants
 
 from misc.ejoystick import EnhancedJoystick
+from misc.led_controller import LEDController
 from misc.sparksim import CANSparkMax
 
 from subsystems.grabber import Grabber
@@ -34,6 +35,8 @@ class MyRobot(magicbot.MagicRobot):
     ramsete: RamseteComponent
     autobalance: AutoBalance
     drivetrain: DriveTrain
+
+    led: LEDController
 
     twitch_no_ball = magicbot.tunable(0.4)
     twitch_w_ball = magicbot.tunable(0.26)
@@ -92,6 +95,9 @@ class MyRobot(magicbot.MagicRobot):
     def right_encoder_d(self) -> int:
         return self.encoder_r.getDistance()
 
+    def disabledPeriodic(self):
+        self.led.disabledPeriodic()
+
     def teleopInit(self):
         self.speed_limiter.reset(0)
 
@@ -131,9 +137,8 @@ class MyRobot(magicbot.MagicRobot):
             self.grabber.release()
         elif self.stick.getRawButton(3):
             self.grabber.lower_release()
-        else:
-            # self.auto_grab.activate()
-            self.auto_lift.activate()
+
+        self.auto_lift.activate()
 
 
 if __name__ == "__main__":
