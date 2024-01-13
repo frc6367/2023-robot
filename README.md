@@ -32,8 +32,8 @@ py -3 -m robotpy_installer install robotpy[all]
 ```
 dir
 ```
-```
-py -3 robot.py sim
+```py -3 robot.py sim
+
 ```
 ```
 py -3 robot.py deploy

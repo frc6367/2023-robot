@@ -34,11 +34,11 @@ class Arm:
     LOW_MIN = LOW_POS - 2
     LOW_MAX = LOW_POS + 2
 
-    OUT_POS = 10
+    OUT_POS = 8
     OUT_MIN = OUT_POS - 2
     OUT_MAX = OUT_POS + 2
 
-    NEUTRAL_POS = 3
+    NEUTRAL_POS = 1
     NEUTRAL_MIN = NEUTRAL_POS - 2
     NEUTRAL_MAX = NEUTRAL_POS + 2
 
